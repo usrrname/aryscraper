@@ -15,9 +15,7 @@ with open(file, 'r') as csv_file:
 
     i = 0
     for row in data:
-
         name = row[i].replace(' ', '_')
-        print(name)
 
         if os.path.isdir(name):
             print(f'A folder called {name} already exists')
