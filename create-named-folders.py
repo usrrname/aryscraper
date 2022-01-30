@@ -4,7 +4,6 @@ import csv
 parent_dir = 'data-set'
 file = 'ss-names.csv'
 path = os.path.abspath(file)
-image_links = []
 
 with open(file, 'r') as csv_file:
     data = csv.reader(csv_file, delimiter=',')
@@ -23,3 +22,5 @@ with open(file, 'r') as csv_file:
         else:
             print(f'\nCreating folder: {name}')
             os.mkdir(name)
+
+csv_file.close()
