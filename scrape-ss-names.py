@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-import pandas as pd
 import os
 import csv
+from util import remove_contents_in_brackets
 
 file = 'ss-names.csv'
 path = os.path.abspath(file)
@@ -17,7 +17,8 @@ if result.status_code == 200:
     soup = BeautifulSoup(result.content, "html.parser")
     for a in soup.select("#mw-content-text h3+table td:first-child:not([colspan]) a"):
         if (a.get("href").startswith("/wiki/")):
-            name = a.get('title')
+            raw_title = a.get('title')
+            name = remove_contents_in_brackets(raw_title)
             personnel.append([name])
 
             with open(file, 'w', encoding='UTF8') as f:
