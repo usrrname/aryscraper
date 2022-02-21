@@ -5,3 +5,5 @@ env/
 /MANIFEST
 /build/
 /dist/
+.env
+venv/
