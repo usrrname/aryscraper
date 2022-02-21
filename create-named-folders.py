@@ -5,6 +5,7 @@ parent_dir = 'data-set'
 file = 'ss-names.csv'
 path = os.path.abspath(file)
 
+# creates the folders for data-set if they don't already exist
 with open(file, 'r') as csv_file:
     data = csv.reader(csv_file, delimiter=',')
 
