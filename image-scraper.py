@@ -45,4 +45,3 @@ def scrape_images(query_string, number_of_images):
         handler.close()
 
 
-scrape_images('Adolf Hitler', 5)
