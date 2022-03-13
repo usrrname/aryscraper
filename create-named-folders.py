@@ -21,7 +21,8 @@ with open(file, 'r') as csv_file:
             print(f'A folder called {name} already exists')
 
         else:
-            print(f'\nCreating folder: {name}')
-            os.mkdir(name)
+            if name != 'Name':
+                print(f'\nCreating folder: {name}')
+                os.mkdir(name)
 
 csv_file.close()
