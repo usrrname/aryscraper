@@ -1,4 +1,6 @@
 import re
+image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
+                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
 
 
 def remove_contents_in_brackets(line):
@@ -8,12 +10,10 @@ def remove_contents_in_brackets(line):
     return sanitized_string
 
 
-def hasExtension(file):
-    file = str(file.lower())
-    image_extensions = ['.png', '.jpg', '.jpeg', '.tiff',
-                        '.bmp', '.gif', '.webp', '.svg']
-    img_ext = ('.png', '.jpg', '.jpeg', '.tiff',
-               '.bmp', '.gif', '.webp', '.svg')
+def has_extension(file):
+    file = str(file)
+    img_ext = ('.png', '.PNG',  '.JPG', '.jpeg', '.tiff',
+               '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG')
     if any(word in file for word in image_extensions) or file.endswith(img_ext):
         return True
     else:
@@ -22,31 +22,30 @@ def hasExtension(file):
 
 def get_image_link(image_url):
     url = str(image_url)
-    extensions = ['.png', '.jpg', '.jpeg', '.tiff',
-                          '.bmp', '.gif', '.webp', '.svg']
-    contains_extension = [ext in url for ext in extensions]
-    for ext in extensions:
+
+    contains_extension = [ext in url for ext in image_extensions]
+    for ext in image_extensions:
         if url.endswith(ext):
-            image_format = url.split('.')[-1]
-            return image_format
-        elif any(ext in url for ext in extensions):
+            return url
+        elif any(ext in url for ext in image_extensions):
             truthy_index = contains_extension.index(True)
-            position = url.find(extensions[truthy_index])
-            full_image_link = url[:position+len(extensions[truthy_index])]
+            position = url.find(image_extensions[truthy_index])
+            full_image_link = url[:position +
+                                  len(image_extensions[truthy_index])]
             return full_image_link
 
 
 def get_image_format(image_url):
     url = str(image_url)
-    extensions = ['.png', '.jpg', '.jpeg', '.tiff',
-                          '.bmp', '.gif', '.webp', '.svg']
-    contains_extension = [ext in url for ext in extensions]
-    for ext in extensions:
+
+    contains_extension = [ext in url for ext in image_extensions]
+    for ext in image_extensions:
         if url.endswith(ext):
             image_format = url.split('.')[-1]
             return image_format
-        elif any(ext in url for ext in extensions):
+        elif any(ext in url for ext in image_extensions):
             truthy_index = contains_extension.index(True)
-            position = url.find(extensions[truthy_index])
-            image_format = url[position:position+len(extensions[truthy_index])]
+            position = url.find(image_extensions[truthy_index])
+            image_format = url[position:position +
+                               len(image_extensions[truthy_index])]
             return image_format
