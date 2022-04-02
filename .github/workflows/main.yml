@@ -1,0 +1,22 @@
+# This is a basic workflow to help you get started with Actions
+
+name: S3 Publish
+
+# Controls when the workflow will run
+on: workflow_dispatch
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+# This workflow contains a single job called "publish"
+  publish:
+# The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Upload to S3
+        run: |
+          aws s3 mb s3://<BUCKET_URL>
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'us-east-1'
