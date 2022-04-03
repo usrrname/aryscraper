@@ -1,6 +1,6 @@
 import re
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
-                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
+                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG', 's3.amazonaws.com']
 
 
 def remove_contents_in_brackets(line):
@@ -12,8 +12,9 @@ def remove_contents_in_brackets(line):
 
 def has_extension(file):
     file = str(file)
-    img_ext = ('.png', '.PNG',  '.JPG', '.jpeg', '.tiff',
+    img_ext = ('.png', '.PNG',  '.JPG', '.jpeg', '.jpg', '.tiff',
                '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG')
+
     if any(word in file for word in image_extensions) or file.endswith(img_ext):
         return True
     else:
@@ -49,3 +50,4 @@ def get_image_format(image_url):
             image_format = url[position:position +
                                len(image_extensions[truthy_index])]
             return image_format
+
