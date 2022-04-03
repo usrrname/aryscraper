@@ -1,4 +1,3 @@
-from unittest import skip
 import requests
 from serpapi import GoogleSearch
 from dotenv import load_dotenv
@@ -15,13 +14,12 @@ headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/2010010
            "Accept-Language": "en-US,en;q=0.5"}
 
 
-def scrape_images(query_string, number_of_images):
-    image_urls = []
+def scrape_images(query_string, number_of_images, start_number):
     params = {
         "api_key": token,
         "engine": "google",
         "ijn": "0",
-        "start": 0,
+        "start": start_number,
         "num": number_of_images,
         "q": query_string + ' portrait',
         "google_domain": "google.com",
@@ -32,18 +30,9 @@ def scrape_images(query_string, number_of_images):
     results = search.get_dict()
     image_results = results['images_results']
 
-    while len(image_urls) < number_of_images:
-        for image in image_results:
-            if (image['original'] and has_extension(image['original'])):
-                image_name = sanitize_filename(
-                    image['title']).replace(' ', '_')
-                image_urls.append(tuple((image_name, image['original'])))
-            else:
-                position = image['position']
-                print(
-                    f'{position}th search result does not have a valid image extension or its original image url does not exist')
-                break
-    return image_urls
+    filtered_images = [image for image in image_results if 'original' in image
+                       and has_extension(image['original'])]
+    return filtered_images
 
 
 def download_images(query, number_of_images):
@@ -59,24 +48,30 @@ def download_images(query, number_of_images):
         return
 
     elif number_of_files_in_folder < number_of_images:
+        remainder = 50 - number_of_files_in_folder
+        start_number = 0
+        print(
+            f'{number_of_files_in_folder} files in folder, need {remainder} more images')
+        if remainder < 0:
+            start_number = 0
         print(query)
-        image_urls = scrape_images(query, number_of_images)
+        image_urls = scrape_images(query, number_of_images, start_number)
 
-        for image_name, image_url in image_urls:
+        for image in image_urls:
 
-            print(f'\nDownloading: {image_url}')
-
+            print(f'\nDownloading: { image["original"]}')
+            title = sanitize_filename(image['title']).replace(' ', '_')
             # get the image extension
-            img_ext = get_image_format(image_url)
+            img_ext = get_image_format(image['original'])
             img_data = requests.get(get_image_link(
-                image_url), headers=headers).content
-            filename = image_name + img_ext
+                image['original']), headers=headers).content
+            filename = title + img_ext
 
-            if os.path.isdir(filename):
+            if os.path.isfile(filename):
                 print(f'{filename} already exists')
                 break
             else:
-                with open(current_path + "/" + image_name + img_ext, 'wb') as handler:
+                with open(current_path + "/" + title + img_ext, 'wb') as handler:
                     try:
                         handler.write(img_data)
                         print(f'\n Successfuly Saved: {filename}')
