@@ -1,12 +1,22 @@
 # This is a basic workflow to help you get started with Actions
 
-name: S3 Publish
+name: Scrape images and Publish on S3
 
 # Controls when the workflow will run
 on: workflow_dispatch
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9" # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: "x64" # optional x64 or x86. Defaults to x64 if not specified
+      - run: python main.py
+    
   # This workflow contains a single job called "publish"
   publish:
     # The type of runner that the job will run on
