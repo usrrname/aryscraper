@@ -1,0 +1,25 @@
+name: Setup test and build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+      - name: Setup Python environment
+      - uses: actions/setup-python@v3
+        with:
+          python-version: "3.9" # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: "x64" # optional x64 or x86. Defaults to x64 if not specified
+          cache: ${{ !env.ACT && 'python3' || '' }}
+      - name: Install Python 🚧
+        if: ${{ env.ACT }}
+        run: make
+      - name: Run Tests and Build 🦺
+        run: pytest
