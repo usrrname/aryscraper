@@ -1,5 +1,7 @@
 import os
 from scraper import download_images
+from util import list_folders
+from pathlib import Path
 
 
 def create_folders(parent_dir, names):
@@ -16,9 +18,7 @@ def create_folders(parent_dir, names):
         else:
             print(f'A folder called {folder_name} already exists')
             break
-    folders = os.listdir(os.getcwd())
-    # All subdirectories in the current directory, not recursive.
-    print(f' folders:  {folders}')
+    list_folders(os.getcwd())
 
 
 def create_data_set(names, number_of_images):

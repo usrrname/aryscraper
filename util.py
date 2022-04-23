@@ -1,5 +1,7 @@
+from pathlib import Path
 import re
 import csv
+from humanize import naturalsize
 
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
                     '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG', 's3.amazonaws.com']
@@ -62,3 +64,24 @@ def get_image_format(image_url):
             image_format = url[position:position +
                                len(image_extensions[truthy_index])]
             return image_format
+
+
+def get_folder_size(path, start_size):
+
+    for file_ in Path(path).rglob('**/*'):
+
+        start_size += file_.stat().st_size
+
+    return naturalsize(start_size)
+
+
+def list_folders(filepath):
+    current_folder = Path(filepath)
+    folders = [f for f in current_folder.rglob('**/*') if f.is_dir()]
+    for folder in folders:
+        size = get_folder_size(folder, folder.stat().st_size)
+        print("{:<8} {:<15} {:<10}".format(
+            folder.parent.name,
+            folder.name,
+            size
+        ))
