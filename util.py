@@ -1,6 +1,18 @@
 import re
+import csv
+
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
                     '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG', 's3.amazonaws.com']
+
+
+def get_names_from_csv(file):
+
+    names = []
+    with open(file, 'r') as csv_file:
+        data = csv.reader(csv_file, delimiter=',')
+        names = [x for x in data if x != 'Name']
+    names.sort()
+    return names
 
 
 def remove_contents_in_brackets(line):
@@ -50,4 +62,3 @@ def get_image_format(image_url):
             image_format = url[position:position +
                                len(image_extensions[truthy_index])]
             return image_format
-
