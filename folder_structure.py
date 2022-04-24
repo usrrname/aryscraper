@@ -1,7 +1,6 @@
 import os
 from scraper import download_images
 from util import list_folders
-from pathlib import Path
 
 
 def create_folders(parent_dir, names):
