@@ -22,4 +22,4 @@ jobs:
         if: ${{ env.ACT }}
         run: make
       - name: Run Tests and Build 🦺
-        run: pytest
+        run: python3 -m pytest
