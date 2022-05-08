@@ -85,3 +85,12 @@ def list_folders(filepath):
             folder.name,
             size
         ))
+
+
+def write_to_csv(filename, person_list, header):
+    with open(filename, 'w', encoding='UTF8') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        [writer.writerow(a) for a in person_list]
+        f.close()
+        return person_list
