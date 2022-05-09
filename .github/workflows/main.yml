@@ -4,7 +4,6 @@ name: Scrape images and Publish on S3
 # Controls when the workflow will run
 on: workflow_dispatch
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -12,18 +11,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python environment
+      - name: setup
+        id: setup
         uses: actions/setup-python@v3
         with:
-          python-version: "3.9" # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: "x64" # optional x64 or x86. Defaults to x64 if not specified
-
-      - name: run python main script
-        uses: jannekem/run-python-script-action@v1
-        id: script
+          python-version: "3.9"
+          cache: "pip"
+          run: |
+            python3 -m pip install --upgrade pip
+            pip install -r requirements.txt
+            python3 -m pytest
+  build:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: build python main.py
+        id: build
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
         run: |
           python3 main.py
-
       - name: upload-artifact
         uses: actions/upload-artifact@v3
         with:
@@ -32,9 +40,8 @@ jobs:
           retention-days: 3
 
   publish:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    needs: upload-artifact
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: Upload to S3
