@@ -20,33 +20,36 @@ jobs:
           run: |
             python3 -m pip install --upgrade pip
             pip install -r requirements.txt
-            python3 -m pytest
+      - name: test
+        run: python3 -m pytest
   build:
     runs-on: ubuntu-latest
     needs: setup
     steps:
       - name: build python main.py
         id: build
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.9"
         run: |
           python3 main.py
-      - name: upload-artifact
+      - name: archive scraped data
         uses: actions/upload-artifact@v3
         with:
           name: data-set
-          path: data-set/*
-          retention-days: 3
+          path: data-set/**
+          retention-days: 5
 
   publish:
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v3
-      - name: Upload to S3
-        run: aws s3 mb s3://${{ secrets.S3_BUCKET_URI }}
+      - uses: actions/download-artifact@v3
+        with:
+          name: data-set
+      - uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete --exclude '.git/*' --exclude '.github/*'
         env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "canada-central-1"
+          AWS_REGION: "canada-central-1"
