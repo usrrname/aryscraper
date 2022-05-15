@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:
-      - run: python3 main.py
+      - run: python3 -m main.py
       - name: archive scraped data
         uses: actions/upload-artifact@v3
         with:
