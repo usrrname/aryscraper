@@ -1,9 +1,11 @@
 name: Setup test and build
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - feature/
+  pull_request:
+    branches: [$default-branch]
 
 jobs:
   build:

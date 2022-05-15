@@ -9,3 +9,4 @@ env/
 venv/
 data-set/*
 *-test.csv
+.actrc
