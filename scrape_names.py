@@ -17,13 +17,15 @@ def request_soupified_response(url):
 def scrape_ss_names(url, filename, header):
     personnel = []
     soup = request_soupified_response(url)
-    for a in soup.select("#mw-content-text h3+table td:first-child:not([colspan]) a"):
+    for a in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
         if (a.get("href").startswith("/wiki/")):
             raw_title = a.get('title')
             name = remove_contents_in_brackets(raw_title)
             personnel.append([name])
-            write_to_csv(filename, personnel, header)
-            return personnel
+
+    personnel.sort()
+    write_to_csv(filename, personnel, header)
+    return personnel
 
 
 def scrape_law_enforcement_names():
