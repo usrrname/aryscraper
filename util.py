@@ -94,3 +94,10 @@ def write_to_csv(filename, person_list, header):
         [writer.writerow(a) for a in person_list]
         f.close()
         return person_list
+
+
+def write_person_data_to_table(filename, tables):
+    with open(filename, 'w', encoding='UTF8') as f:
+        writer = csv.writer(f)
+        [writer.writerow(row) for row in tables]
+        f.close()

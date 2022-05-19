@@ -1,6 +1,8 @@
+from csv import writer
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from util import remove_contents_in_brackets, write_to_csv
+from util import remove_contents_in_brackets, write_person_data_to_table, write_to_csv
 
 
 def request_soupified_response(url):
@@ -28,10 +30,32 @@ def scrape_ss_names(url, filename, header):
     return personnel
 
 
-def scrape_law_enforcement_names():
+def scrape_ss_data(url, filename):
+    soup = request_soupified_response(url)
+    tables = soup.find_all('table', {'align': 'center'})
+    subject_tables = []
+
+    for table in tables:
+        new_table = []
+        headings = table.find_all('th')
+        header = [th.text.replace('\n', '') for th in headings]
+        new_table.extend([header])
+
+        for row in table.find_all('tr'):
+            # Find all data for each column
+            cells = row.find_all('td')
+            new_row = [cell.text.replace('\n', '') for cell in cells]
+            new_table.extend([new_row])
+        subject_tables.extend(new_table)
+
+    write_person_data_to_table(filename, subject_tables)
+
+
+def scrape_law_enforcement_names(url, filename, header):
     personnel = []
-    url = 'https://en.wikipedia.org/wiki/List_of_law_enforcement_officers_convicted_for_an_on-duty_killing_in_the_United_States'
     soup = request_soupified_response(url)
     for td in soup.select("#mw-content-text table.wikitable.sortable td:nth-child(2)"):
         personnel.append(td.text.replace('\n', ''))
-        return personnel
+        personnel.sort()
+    write_to_csv(filename, personnel, header)
+    return personnel
