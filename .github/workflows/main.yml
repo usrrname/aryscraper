@@ -3,8 +3,6 @@ name: Scrape images and Publish on S3
 
 # runs on push to main
 on:
-  push:
-    branches: [$default-branch]
   workflow_dispatch: # can also be manually run
 
 jobs:
