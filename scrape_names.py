@@ -17,17 +17,26 @@ def request_soupified_response(url):
 
 
 def scrape_ss_names(url, filename, header):
-    personnel = []
+    collected_names = []
     soup = request_soupified_response(url)
+
     for a in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
         if (a.get("href").startswith("/wiki/")):
             raw_title = a.get('title')
             name = remove_contents_in_brackets(raw_title)
-            personnel.append([name])
+            collected_names.append(name)
 
+    personnel = list(dict.fromkeys(collected_names))
     personnel.sort()
-    write_to_csv(filename, personnel, header)
-    return personnel
+    person_list = [[person] for person in personnel]
+    write_to_csv(filename, person_list, header)
+    return person_list
+
+
+filename = 'ss-names.csv'
+url = 'https://en.wikipedia.org/wiki/List_of_SS_personnel'
+header = ['Name']
+scrape_ss_names(url, filename, header)
 
 
 def scrape_ss_data(url, filename):
