@@ -1,6 +1,7 @@
 import os
 from scraper import download_images
-from util import list_folders
+from util import list_folders, write_csv_header
+from glob import glob
 
 
 def create_folders(parent_dir, names):
@@ -20,17 +21,20 @@ def create_folders(parent_dir, names):
     list_folders(os.getcwd())
 
 
-def create_data_set(names, number_of_images):
-    index = 1
-    # loop through list of names listed from csv file
-    while index < len(names):
-        # stringify the google search query
-        query = ''.join(names[index])
-        folder_name = query.replace(' ', '_')
+def create_raw_data_set(name, number_of_images):
 
-        # if folder already exists; scrape 50 images
-        if os.path.isdir(folder_name):
-            os.chdir(folder_name)
-            download_images(query, number_of_images)
-            os.chdir('..')
-        index += 1
+    folder_name = name.replace(' ', '_')
+
+    # if folder already exists; scrape 50 images
+    if os.path.isdir(folder_name):
+        os.chdir(folder_name)
+        print(f'\nScraping images for {name}')
+        os.mkdir('raw') and os.chdir('raw')
+        print('Created raw and test folders in {}'.format(os.getcwd()))
+        download_images(name, number_of_images)
+        os.chdir('../..')
+
+    # list most recently updated image index
+    image_index = len(os.listdir(
+        glob({folder_name/'raw/*jpg|png|jpeg|svg|gif|webp|bmp'})))
+    print(f'\n{image_index} images scraped for {name}')
