@@ -1,10 +1,12 @@
+import requests
+import mimetypes
 from pathlib import Path
 import re
 import csv
 from humanize import naturalsize
 
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
-                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG', 's3.amazonaws.com']
+                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
 
 
 def get_names_from_csv(file):
@@ -51,19 +53,11 @@ def get_image_link(image_url):
 
 
 def get_image_format(image_url):
-    url = str(image_url)
-
-    contains_extension = [ext in url for ext in image_extensions]
-    for ext in image_extensions:
-        if url.endswith(ext):
-            image_format = url.split('.')[-1]
-            return image_format
-        elif any(ext in url for ext in image_extensions):
-            truthy_index = contains_extension.index(True)
-            position = url.find(image_extensions[truthy_index])
-            image_format = url[position:position +
-                               len(image_extensions[truthy_index])]
-            return image_format
+    response = requests.head(image_url)
+    content_type = response.headers['content-type']
+    extension = mimetypes.guess_extension(content_type)
+    print(extension)
+    return extension
 
 
 def get_folder_size(path, start_size):
@@ -101,3 +95,21 @@ def write_person_data_to_table(filename, tables):
         writer = csv.writer(f)
         [writer.writerow(row) for row in tables]
         f.close()
+
+def write_csv_header(filename, header):
+    with open(filename, 'w', encoding='UTF8') as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        f.close()
+
+def is_already_saved(data_row):
+   # checks if image info is already saved in csv
+    with open('../data-info.csv', "r") as infile:
+        reader = csv.reader(infile)
+        next(reader)
+        for line in reader:
+            if [data_row] == line:
+                print('Image already in data-info.csv')
+                return True
+            else:
+                return False
