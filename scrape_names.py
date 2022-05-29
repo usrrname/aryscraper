@@ -19,11 +19,22 @@ def request_soupified_response(url):
 def scrape_ss_names(url, filename, header):
     collected_names = []
     soup = request_soupified_response(url)
+    ranks = []
+    for heading in soup.select('.mw-headline'):
+        ranks.append(heading.text)
 
     for a in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
+
         if (a.get("href").startswith("/wiki/")):
             raw_title = a.get('title')
-            name = remove_contents_in_brackets(raw_title)
+            name = remove_contents_in_brackets(
+                raw_title).replace('"', '').replace(',', '')
+            collected_names.append(name)
+    for a in soup.select('h2+table td:first-child:not([colspan]) a'):
+        if (a.get("href").startswith("/wiki/")):
+            raw_title = a.get('title')
+            name = remove_contents_in_brackets(
+                raw_title).replace('"', '').replace(',', '')
             collected_names.append(name)
 
     personnel = list(dict.fromkeys(collected_names))
@@ -33,23 +44,15 @@ def scrape_ss_names(url, filename, header):
     return person_list
 
 
-filename = 'ss-names.csv'
-url = 'https://en.wikipedia.org/wiki/List_of_SS_personnel'
-header = ['Name']
-scrape_ss_names(url, filename, header)
-
-
 def scrape_ss_data(url, filename):
     soup = request_soupified_response(url)
     tables = soup.find_all('table', {'align': 'center'})
     subject_tables = []
-
     for table in tables:
         new_table = []
         headings = table.find_all('th')
         header = [th.text.replace('\n', '') for th in headings]
         new_table.extend([header])
-
         for row in table.find_all('tr'):
             # Find all data for each column
             cells = row.find_all('td')
