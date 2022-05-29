@@ -1,40 +1,51 @@
 import os
 from scraper import download_images
-from util import list_folders, write_csv_header
-from glob import glob
+from util import list_folders, sanitize_names_for_folders
 
 
 def create_folders(parent_dir, names):
+    folder_names = sanitize_names_for_folders(names)
     # if data-set folder does not exist, create it
     if os.path.isdir(parent_dir) == False:
         os.mkdir(parent_dir) and os.chdir(parent_dir)
     # if if exists, move into it
     os.chdir(parent_dir)
-    for name in names:
-        folder_name = ''.join(name).replace(' ', '_')
-        if os.path.isdir(folder_name) == False and folder_name != 'Name':
-            print(f'Creating folder {folder_name}')
-            os.mkdir(folder_name)
+
+    for folder in folder_names:
+        if os.path.isdir(folder) == False and folder != 'Name':
+            print(f'Creating folder {folder}')
+            os.mkdir(folder)
         else:
-            print(f'A folder called {folder_name} already exists')
-            break
+            print(f'A folder called {folder} already exists')
     list_folders(os.getcwd())
 
 
-def create_raw_data_set(name, number_of_images):
+def create_data_set(names, number_of_images):
+    flattened_names = []
+    transformed_names = [flattened_names.append(''.join(name))
+                         for name in names if name != 'Name']
+    folder_names = sanitize_names_for_folders(names)
 
-    folder_name = name.replace(' ', '_')
+    if os.getcwd() != 'data-set':
+        os.chdir('data-set')
 
-    # if folder already exists; scrape 50 images
-    if os.path.isdir(folder_name):
-        os.chdir(folder_name)
-        print(f'\nScraping images for {name}')
-        os.mkdir('raw') and os.chdir('raw')
-        print('Created raw and test folders in {}'.format(os.getcwd()))
-        download_images(name, number_of_images)
-        os.chdir('../..')
+    index = 0
+    # loop through list of names listed from csv file
+    while index < len(names):
 
-    # list most recently updated image index
-    image_index = len(os.listdir(
-        glob({folder_name/'raw/*jpg|png|jpeg|svg|gif|webp|bmp'})))
-    print(f'\n{image_index} images scraped for {name}')
+        if os.path.isdir(folder_names[index]) == True and folder_names[index] != 'Name':
+
+            # if folder already exists; scrape 50 images
+            os.chdir(folder_names[index])
+            print('switching to folder: ' + folder_names[index])
+            # stringify the google search query
+            query = ''.join(names[index]).strip()
+            try:
+                download_images(query, number_of_images)
+                os.chdir('..')
+            except Exception as e:
+                print(e)
+                print(
+                    f'Error downloading images from {folder_names[index]}')
+                os.chdir('..')
+        index += 1

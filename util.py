@@ -10,7 +10,6 @@ image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
 
 
 def get_names_from_csv(file):
-
     names = []
     with open(file, 'r') as csv_file:
         data = csv.reader(csv_file, delimiter=',')
@@ -96,11 +95,13 @@ def write_person_data_to_table(filename, tables):
         [writer.writerow(row) for row in tables]
         f.close()
 
+
 def write_csv_header(filename, header):
     with open(filename, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
         writer.writerow(header)
         f.close()
+
 
 def is_already_saved(data_row):
    # checks if image info is already saved in csv
@@ -113,3 +114,18 @@ def is_already_saved(data_row):
                 return True
             else:
                 return False
+
+
+def sanitize_names_for_folders(names):
+    folder_names = []
+    for name in names:
+        if name != 'Name':
+            folder_name = ''.join(name)
+            if len(folder_name.split(' ')) <= 4:
+                folder_name = folder_name.strip().replace(' ', '_')
+                folder_names.append(folder_name)
+            else:
+                name_array = folder_name.split(' ')[:4]
+                folder_name = ''.join(name_array).strip().replace(' ', '_')
+                folder_names.extend([folder_name])
+    return folder_names
