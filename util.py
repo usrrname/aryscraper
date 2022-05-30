@@ -6,16 +6,27 @@ import csv
 from humanize import naturalsize
 
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
-                    '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
+                    '.tif', '.TIF', '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
 
 
-def get_names_from_csv(file):
-    names = []
+def get_classes_from_csv(file):
+    class_map = {}
     with open(file, 'r') as csv_file:
         data = csv.reader(csv_file, delimiter=',')
-        names = [x for x in data if x != 'Name']
-    names.sort()
-    return names
+        for row in data:
+            if row[0] != 'Number':
+                class_map.update({row[0]: row[1].strip()})
+    return class_map
+
+
+def get_labels_from_csv(file):
+    label_map = {}
+    with open(file, 'r') as csv_file:
+        data = csv.reader(csv_file, delimiter=',')
+        for row in data:
+            if row[0] != 'Number':
+                label_map.update({row[1].strip(): row[0]})
+    return label_map
 
 
 def remove_contents_in_brackets(line):
@@ -80,6 +91,37 @@ def list_folders(filepath):
         ))
 
 
+def get_classifier_and_label(row):
+    result = []
+    labels_map = get_labels_from_csv('ss-ranks.csv')
+    labels = list(labels_map.keys())
+    prospective_label = row.text.split(
+        '\xa0')[0].replace('\xa0', '')
+    prospective_label = ''.join(prospective_label)
+    if prospective_label.startswith('\n'):
+        prospective_label = prospective_label[1:]
+    if prospective_label.endswith('-SS'):
+        prospective_label = prospective_label[:-3]
+    if prospective_label.startswith('Gerhard Putsch'):
+        prospective_label = 'SS-Stabsscharführer'
+    if prospective_label == 'Professor Wolfgang Abel':
+        prospective_label = 'SS biologist'
+    if prospective_label == 'Hermann Paul Maximilian Abendroth':
+        prospective_label = 'SS-Kapellmeister'
+
+    if any(string in prospective_label for string in labels):
+        try:
+            label = prospective_label
+            classifier = labels_map.get(prospective_label)
+            # print(f'{prospective_label} -> {classifier}')
+            result = [classifier, label]
+        except TypeError in Exception:
+            print(TypeError.args)
+            print(TypeError + ': ' +
+                  prospective_label + ' not found in labels')
+    return result
+
+
 def write_to_csv(filename, person_list, header):
     with open(filename, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
@@ -125,7 +167,28 @@ def sanitize_names_for_folders(names):
                 folder_name = folder_name.strip().replace(' ', '_')
                 folder_names.append(folder_name)
             else:
-                name_array = folder_name.split(' ')[:4]
+                name_array = folder_name.split(' ')[: 4]
                 folder_name = ''.join(name_array).strip().replace(' ', '_')
                 folder_names.extend([folder_name])
     return folder_names
+
+
+def get_names_from_csv(file):
+    names = []
+    with open(file, 'r') as csv_file:
+        data = csv.reader(csv_file, delimiter=',')
+        data = list(data)
+        for row in data:
+            if row != [] and row[0] != 'Name':
+                extracted_name = remove_contents_in_brackets(
+                    row[0].name).replace('"', '').replace(',', '').replace('.', '')
+                if '[]' in extracted_name:
+                    extracted_name = extracted_name.replace('[]', '')
+                if '/' in extracted_name:
+                    extracted_name = extracted_name.replace('/', ' ')
+                elif ('[3]' or '[15]' or '[14]') in extracted_name:
+                    extracted_name = extracted_name.replace('[15]', '')
+                names.append(extracted_name)
+    csv_file.close()
+    names.sort()
+    return names

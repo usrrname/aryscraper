@@ -1,8 +1,7 @@
-from csv import writer
-import pandas as pd
+from warnings import catch_warnings
 import requests
 from bs4 import BeautifulSoup
-from util import remove_contents_in_brackets, write_person_data_to_table, write_to_csv
+from util import get_classifier_and_label, get_labels_from_csv, remove_contents_in_brackets, write_person_data_to_table, write_to_csv
 
 
 def request_soupified_response(url):
@@ -19,9 +18,6 @@ def request_soupified_response(url):
 def scrape_ss_names(url, filename, header):
     collected_names = []
     soup = request_soupified_response(url)
-    ranks = []
-    for heading in soup.select('.mw-headline'):
-        ranks.append(heading.text)
 
     for a in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
 
@@ -30,12 +26,16 @@ def scrape_ss_names(url, filename, header):
             name = remove_contents_in_brackets(
                 raw_title).replace('"', '').replace(',', '')
             collected_names.append(name)
-    for a in soup.select('h2+table td:first-child:not([colspan]) a'):
-        if (a.get("href").startswith("/wiki/")):
+
+    for cell in soup.select('h2+table td:first-child:not([colspan])'):
+
+        if (cell.get("href").startswith("/wiki/")):
             raw_title = a.get('title')
             name = remove_contents_in_brackets(
                 raw_title).replace('"', '').replace(',', '')
             collected_names.append(name)
+        else:
+            print(cell.text)
 
     personnel = list(dict.fromkeys(collected_names))
     personnel.sort()
@@ -44,23 +44,46 @@ def scrape_ss_names(url, filename, header):
     return person_list
 
 
+scrape_ss_names(
+    'https://en.wikipedia.org/wiki/List_of_SS_personnel', 'ss-names.csv', ['Name'])
+
+
 def scrape_ss_data(url, filename):
     soup = request_soupified_response(url)
     tables = soup.find_all('table', {'align': 'center'})
     subject_tables = []
+    labels_map = get_labels_from_csv('ss-ranks.csv')
+    labels = list(labels_map.keys())
+
     for table in tables:
         new_table = []
         headings = table.find_all('th')
         header = [th.text.replace('\n', '') for th in headings]
+        header.extend(['Class', 'Label'])
         new_table.extend([header])
-        for row in table.find_all('tr'):
+        rows = table.find_all('tr')
+
+        for row in rows[1:]:
             # Find all data for each column
             cells = row.find_all('td')
-            new_row = [cell.text.replace('\n', '') for cell in cells]
-            new_table.extend([new_row])
-        subject_tables.extend(new_table)
 
-    write_person_data_to_table(filename, subject_tables)
+            row_data = [cell.text.replace('\n', '').replace('\xa0', '')
+                        for cell in cells if cell.text not in labels]
+            try:
+                result = get_classifier_and_label(rows[1])
+                if result != []:
+                    row_data.extend(result)
+                new_table.extend([row_data])
+            except TypeError in Exception:
+                print(TypeError)
+            except ValueError:
+                print(ValueError)
+        subject_tables.extend(new_table)
+    write_to_csv(filename, subject_tables, header=[])
+
+
+# scrape_ss_data(
+#     'https://en.wikipedia.org/wiki/List_of_SS_personnel', 'ss-info.csv')
 
 
 def scrape_law_enforcement_names(url, filename, header):
