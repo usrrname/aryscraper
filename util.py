@@ -175,11 +175,12 @@ def sanitize_names_for_folders(names):
 
 def get_names_from_csv(file):
     names = []
+    ranks = list(get_labels_from_csv('ss-ranks.csv').keys())
     with open(file, 'r') as csv_file:
         data = csv.reader(csv_file, delimiter=',')
         data = list(data)
         for row in data:
-            if row != [] and row[0] != 'Name':
+            if row != [] and row[0] != 'Name' and row[0] not in ranks:
                 extracted_name = remove_contents_in_brackets(
                     row[0].strip())
                 extracted_name = extracted_name.replace(
@@ -189,7 +190,7 @@ def get_names_from_csv(file):
                 if '/' in extracted_name:
                     extracted_name = extracted_name.replace('/', ' ')
                 names.append(extracted_name)
-        
+
     csv_file.close()
     names.sort()
     return names
