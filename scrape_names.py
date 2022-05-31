@@ -19,33 +19,27 @@ def scrape_ss_names(url, filename, header):
     collected_names = []
     soup = request_soupified_response(url)
 
-    for a in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
+    for cell in soup.select("#mw-content-text .mw-parser-output h3+table td:first-child:not([colspan]) a"):
 
-        if (a.get("href").startswith("/wiki/")):
-            raw_title = a.get('title')
+        if cell.get("href").startswith("/wiki/"):
+            raw_title = cell.get("title")
             name = remove_contents_in_brackets(
                 raw_title).replace('"', '').replace(',', '')
             collected_names.append(name)
 
-    for cell in soup.select('h2+table td:first-child:not([colspan])'):
+    for cell in soup.select('#mw-content-text h2+table td:first-child:not([colspan]) a'):
 
         if (cell.get("href").startswith("/wiki/")):
-            raw_title = a.get('title')
+            raw_title = cell.get('title')
             name = remove_contents_in_brackets(
                 raw_title).replace('"', '').replace(',', '')
             collected_names.append(name)
-        else:
-            print(cell.text)
 
     personnel = list(dict.fromkeys(collected_names))
     personnel.sort()
     person_list = [[person] for person in personnel]
     write_to_csv(filename, person_list, header)
     return person_list
-
-
-scrape_ss_names(
-    'https://en.wikipedia.org/wiki/List_of_SS_personnel', 'ss-names.csv', ['Name'])
 
 
 def scrape_ss_data(url, filename):
@@ -80,10 +74,6 @@ def scrape_ss_data(url, filename):
                 print(ValueError)
         subject_tables.extend(new_table)
     write_to_csv(filename, subject_tables, header=[])
-
-
-# scrape_ss_data(
-#     'https://en.wikipedia.org/wiki/List_of_SS_personnel', 'ss-info.csv')
 
 
 def scrape_law_enforcement_names(url, filename, header):
