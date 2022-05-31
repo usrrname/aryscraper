@@ -181,14 +181,15 @@ def get_names_from_csv(file):
         for row in data:
             if row != [] and row[0] != 'Name':
                 extracted_name = remove_contents_in_brackets(
-                    row[0].name).replace('"', '').replace(',', '').replace('.', '')
+                    row[0].strip())
+                extracted_name = extracted_name.replace(
+                    '"', '').replace(',', '').replace('.', '')
                 if '[]' in extracted_name:
                     extracted_name = extracted_name.replace('[]', '')
                 if '/' in extracted_name:
                     extracted_name = extracted_name.replace('/', ' ')
-                elif ('[3]' or '[15]' or '[14]') in extracted_name:
-                    extracted_name = extracted_name.replace('[15]', '')
                 names.append(extracted_name)
+        
     csv_file.close()
     names.sort()
     return names

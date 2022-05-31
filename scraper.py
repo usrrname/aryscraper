@@ -1,10 +1,10 @@
-from util import get_image_format, get_image_link, is_already_saved
+from util import get_image_format, get_image_link, is_already_saved, image_extensions
 import csv
-from glob import glob
 import requests
 from serpapi import GoogleSearch
 from dotenv import load_dotenv
 from pathvalidate import sanitize_filename
+from PIL import Image
 import os
 
 load_dotenv()
@@ -21,7 +21,7 @@ ambiguous_names = ['Anton Burger']
 def scrape_images(name, number_of_images, start_number):
 
     if name in ambiguous_names:
-        name.join(' Nazi')      # clarify search for names that are common
+        name.join(' nazi')      # clarify search for names that are common
     else:
         name.join(' portrait')  # standard query string
 
@@ -43,7 +43,7 @@ def scrape_images(name, number_of_images, start_number):
     image_results = results['images_results']
 
     filtered_images = [image for image in image_results if 'original' in image
-                       and get_image_format(image['original']) in ['.jpg', '.png', '.jpeg', '.svg', '.gif', '.webp', '.bmp']]
+                       and get_image_format(image['original']) in image_extensions]
     print(filtered_images)
     return filtered_images
 
@@ -51,9 +51,6 @@ def scrape_images(name, number_of_images, start_number):
 def download_images(name, number_of_images):
     current_path = os.getcwd()
     number_of_files_in_folder = len(next(os.walk(current_path))[2])
-    image_index = len(os.listdir(
-        glob({current_path/'raw/*jpg|png|jpeg|svg|gif|webp|bmp'})))
-    print(image_index)
 
     print(
         f'currently {number_of_files_in_folder} / {number_of_images} files in {os.getcwd()}')
@@ -88,6 +85,8 @@ def download_images(name, number_of_images):
                     with open(current_path + "/" + title + img_ext, 'wb') as handler:
                         img_data = requests.get(get_image_link(
                             image['original']), headers=headers).content
+                        im = Image.open(img_data)
+                        im.resize(img_data, (100, 100))
                         handler.write(img_data)
                         print(f'\n Successfuly Saved: {filename}')
                         handler.close()
@@ -98,7 +97,7 @@ def download_images(name, number_of_images):
                 except KeyError as e:
                     print(f'\nMapping of original key not found: {KeyError}')
                 except Exception as e:
-                    print(f'\n Failed to Save: {filename}, {e.message}')
+                    print(f'\n Failed to Save: {filename}, {e}')
             else:
                 print(f'Image already in data-info.csv, skipping to next image')
                 break
