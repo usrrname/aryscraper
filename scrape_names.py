@@ -1,7 +1,8 @@
-from warnings import catch_warnings
+from getopt import getopt
+import sys
 import requests
 from bs4 import BeautifulSoup
-from util import get_classifier_and_label, get_labels_from_csv, remove_contents_in_brackets, write_person_data_to_table, write_to_csv
+from util import get_classifier_and_label, get_labels_from_csv, get_names_from_csv, remove_contents_in_brackets, write_to_csv
 
 
 def request_soupified_response(url):
@@ -84,3 +85,31 @@ def scrape_law_enforcement_names(url, filename, header):
         personnel.sort()
     write_to_csv(filename, personnel, header)
     return personnel
+
+
+def main(argv):
+    inputfile = ''
+    outputfile = ''
+    try:
+        opts, args = getopt(argv, "hi:o:", ["ifile=", "ofile="])
+    except getopt.GetoptError:
+        print('scrape_names.py -i <inputfile> -o <outputfile>')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print('scrape_names.py -i {inputfile} -o {outputfile}')
+            sys.exit()
+        elif opt in ("-i", "--ifile"):
+            inputfile = arg
+        elif opt in ("-o", "--ofile"):
+            outputfile = arg
+    print('Input file is "', inputfile)
+    print('Output file is "', outputfile)
+    names = get_names_from_csv(inputfile)
+    personnel = list(dict.fromkeys(names))
+    person_list = [[person] for person in personnel]
+    write_to_csv(outputfile, person_list, ['Name'])
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
