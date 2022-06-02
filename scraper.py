@@ -62,9 +62,10 @@ def scrape_images(name, number_of_images, start_number):
     return filtered_images
 
 
-def save_images(name, image_urls, sentinel_value=0):
-    if sentinel_value != 0:
-        i = sentinel_value
+def save_images(name, image_urls, next_image_index=0):
+    if next_image_index != 0:
+        i = next_image_index
+
     for i, image in enumerate(image_urls):
 
         # get the image extension
@@ -106,23 +107,26 @@ def save_images(name, image_urls, sentinel_value=0):
             print(f'\n Failed to Save: data-info.csv at the {i}th file, {e}')
 
 
+def lookup_recent_row(csv_file):
+    # finds image position in returned response
+    most_recent_row = last_row_from_csv(csv_file)
+    last_image_index = int(most_recent_row[3])
+
+    # gets last index used to prepend filename
+    next_image_index = int(most_recent_row[1].split('-')[0]) + 1
+    print(
+        f'last image index: {last_image_index}\n next image index: {next_image_index}')
+    return next_image_index, last_image_index
+
+
 def download_images(name, number_of_images):
-    sentinel_value, last_image_index = 0, 0
+    next_image_index, last_image_index = 'undefined', 0
 
     if not os.path.exists('raw'):
         os.mkdir('raw') and os.chdir('raw') and write_csv_header(
             'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
     else:  # if folder already exists, check for last saved image
         os.chdir('raw')
-        if os.path.exists('data-info.csv'):
-            # finds image position in returned response
-            most_recent_row = last_row_from_csv('data-info.csv')
-            last_image_index = int(most_recent_row[3])
-
-            # gets last index used to prepend filename
-            sentinel_value = int(most_recent_row[1][0]) + 1
-            print(
-                f'last image index: {last_image_index} \n next image index: {sentinel_value}')
 
     files = os.listdir(os.getcwd())
 
@@ -148,12 +152,14 @@ def download_images(name, number_of_images):
 
         if remainder >= 1 and os.path.isfile('data.json'):
             image_results = read_json('data.json')
-
+            if os.path.exists('data-info.csv'):
+                next_image_index, last_image_index = lookup_recent_row(
+                    'data-info.csv')
             # find json file and rollup remaining images
             image_urls = [
                 image for image in image_results if image['original'] and image['position'] > last_image_index]
+            save_images(name, image_urls, next_image_index)
         else:
             start_number = 1
             image_urls = scrape_images(name, number_of_images, start_number)
-
-        save_images(name, image_urls, sentinel_value)
+            save_images(name, image_urls, next_image_index)
