@@ -1,4 +1,4 @@
-from util import get_image_format, get_image_link, is_already_saved, image_extensions
+from util import get_image_format, get_image_link, is_already_saved, image_extensions, has_img_extension, list_folders, get_names_from_csv, sanitize_names_for_folders, add_row_to_csv, write_csv_header, read_json, last_row_from_csv
 import csv
 import requests
 from serpapi import GoogleSearch
@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from pathvalidate import sanitize_filename
 from PIL import Image
 import os
+import sys
+from glob import glob1
+import urllib.request
 
 load_dotenv()
 
@@ -15,17 +18,20 @@ headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/2010010
            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
            "Accept-Language": "en-US,en;q=0.5"}
 
-ambiguous_names = ['Anton Burger']
+ambiguous_names = ['Adam Grünewald', 'Anton Burger',
+                   'Karl Otto von Salisch', 'Yuri Frolov']
 
 
 def scrape_images(name, number_of_images, start_number):
+    name = str(name)
+    query = ''
 
-    if name in ambiguous_names:
-        name.join(' nazi')      # clarify search for names that are common
+    if any(name for word in ambiguous_names):
+        # clarify search for names that are common
+        query = name + ' nazi'
+
     else:
-        name.join(' portrait')  # standard query string
-
-    query = name
+        query = name + (' portrait')  # standard query string
 
     params = {
         "api_key": token,
@@ -42,62 +48,112 @@ def scrape_images(name, number_of_images, start_number):
     results = search.get_dict()
     image_results = results['images_results']
 
-    filtered_images = [image for image in image_results if 'original' in image
-                       and get_image_format(image['original']) in image_extensions]
-    print(filtered_images)
+    try:
+        # saves json of response incase of failure
+        urllib.request.urlretrieve(
+            results['search_metadata']['json_endpoint'], 'data.json')
+        filtered_images = [
+            image for image in image_results if image['original']]
+
+    except KeyError in Exception as e:
+        print(f'{KeyError}: {e}')
+    except TypeError in Exception as e:
+        print(f'{TypeError}: {e}')
     return filtered_images
 
 
+def save_images(name, image_urls, sentinel_value=0):
+    if sentinel_value != 0:
+        i = sentinel_value
+    for i, image in enumerate(image_urls):
+
+        # get the image extension
+        img_ext = get_image_format(image['original'])
+
+        if img_ext not in image_extensions or None:
+            continue
+
+        title = image['title']
+        img_position = image['position']  # position in search results
+        file_title = sanitize_filename(name).lower().replace(
+            ' ', '')[:6]  # trim the file title for consistency
+
+        filename = f'{i}-{file_title}{img_ext}'
+        data_row = [name, filename, title,
+                    img_position, image['original']]
+        try:
+            current_path = os.getcwd()
+            with open(current_path + "/" + filename, 'wb') as handler:
+                print(f'\nDownloading: {image["original"]}')
+                img_data = requests.get(get_image_link(
+                    image['original']), headers=headers).content
+                handler.write(img_data)
+                print(f'\n Successfuly Saved: {filename}')
+                handler.close()
+        except KeyError as e:
+            print(
+                f'\nMapping of original key not found: {KeyError}, {e}')
+        except Exception as e:
+            print(f'{e}')
+        try:
+            if not os.path.exists('data-info.csv'):
+                write_csv_header(
+                    'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
+                add_row_to_csv(current_path + '/' + 'data-info.csv', data_row)
+            elif is_already_saved(data_row, 'data-info.csv') == False:
+                add_row_to_csv(current_path + '/' + 'data-info.csv', data_row)
+        except Exception as e:
+            print(f'\n Failed to Save: data-info.csv at the {i}th file, {e}')
+
+
 def download_images(name, number_of_images):
-    current_path = os.getcwd()
-    number_of_files_in_folder = len(next(os.walk(current_path))[2])
+    sentinel_value, last_image_index = 0, 0
+
+    if not os.path.exists('raw'):
+        os.mkdir('raw') and os.chdir('raw') and write_csv_header(
+            'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
+    else:  # if folder already exists, check for last saved image
+        os.chdir('raw')
+        if os.path.exists('data-info.csv'):
+            # finds image position in returned response
+            most_recent_row = last_row_from_csv('data-info.csv')
+            last_image_index = int(most_recent_row[3])
+
+            # gets last index used to prepend filename
+            sentinel_value = int(most_recent_row[1][0]) + 1
+            print(
+                f'last image index: {last_image_index} \n next image index: {sentinel_value}')
+
+    files = os.listdir(os.getcwd())
+
+    images_only = [file for file in files if has_img_extension(file)]
+
+    number_of_files_in_folder = len(images_only)
 
     print(
-        f'currently {number_of_files_in_folder} / {number_of_images} files in {os.getcwd()}')
+        f'Status: {number_of_files_in_folder}/{number_of_images} files in {os.getcwd()}')
 
     if number_of_files_in_folder >= number_of_images:
         print(
             f'{number_of_files_in_folder} files in folder, only require {number_of_images} images\nFolder contains enough images. Skipping download.')
         return
 
-    elif number_of_files_in_folder < number_of_images:
-        remainder = 50 - number_of_files_in_folder
+    else:
+        remainder = 100 - number_of_files_in_folder
         print(
             f'{number_of_files_in_folder} files in folder, need {remainder} more images')
-        if remainder < 0:
-            start_number = 0
-        image_urls = scrape_images(name, number_of_images, start_number)
 
-        for image in image_urls:
+        start_number = 0
+        image_urls = []
 
-            print(f'\nDownloading: { image["original"]}')
-            title = image[title]
-            # get the image extension
-            img_ext = get_image_format(image['original'])
-            img_position = image['position']  # position in search results
-            file_title = sanitize_filename(name).lower().replace(
-                ' ', '')[:6]  # trim the file title for consistency
-            filename = f'{img_position}-{file_title}{img_ext}'
-            data_row = [name, filename, title, img_position, image['original']]
+        if remainder >= 1 and os.path.isfile('data.json'):
+            image_results = read_json('data.json')
 
-            if is_already_saved(data_row) == False:
-                try:
-                    with open(current_path + "/" + title + img_ext, 'wb') as handler:
-                        img_data = requests.get(get_image_link(
-                            image['original']), headers=headers).content
-                        im = Image.open(img_data)
-                        im.resize(img_data, (100, 100))
-                        handler.write(img_data)
-                        print(f'\n Successfuly Saved: {filename}')
-                        handler.close()
-                    with open('../data_info.csv', 'a') as csv_file:
-                        writer = csv.writer(csv_file)
-                        writer.writerow(data_row)
-                        csv_file.close()
-                except KeyError as e:
-                    print(f'\nMapping of original key not found: {KeyError}')
-                except Exception as e:
-                    print(f'\n Failed to Save: {filename}, {e}')
-            else:
-                print(f'Image already in data-info.csv, skipping to next image')
-                break
+            # find json file and rollup remaining images
+            image_urls = [
+                image for image in image_results if image['original'] and image['position'] > last_image_index]
+        else:
+            start_number = 1
+            image_urls = scrape_images(name, number_of_images, start_number)
+
+        save_images(name, image_urls, sentinel_value)

@@ -3,6 +3,7 @@ import mimetypes
 from pathlib import Path
 import re
 import csv
+import json
 from humanize import naturalsize
 
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
@@ -32,11 +33,10 @@ def get_labels_from_csv(file):
 def remove_contents_in_brackets(line):
     pattern = r"\([^()]*\)"
     sanitized_string = re.sub(pattern, '', line)
-    print(sanitized_string)
     return sanitized_string
 
 
-def has_extension(file):
+def has_img_extension(file):
     file = str(file)
     img_ext = ('.png', '.PNG',  '.JPG', '.jpeg', '.jpg', '.tiff',
                '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG')
@@ -51,6 +51,7 @@ def get_image_link(image_url):
     url = str(image_url)
 
     contains_extension = [ext in url for ext in image_extensions]
+
     for ext in image_extensions:
         if url.endswith(ext):
             return url
@@ -60,13 +61,21 @@ def get_image_link(image_url):
             full_image_link = url[:position +
                                   len(image_extensions[truthy_index])]
             return full_image_link
+        else:
+            if ('http' or 'https') in image_url:
+                return image_url
+            else:
+                os.path.splitext(image_url)
 
 
 def get_image_format(image_url):
     response = requests.head(image_url)
-    content_type = response.headers['content-type']
+    try:
+        content_type = response.headers['content-type']
+    except KeyError in Exception:
+        print(f'{KeyError, e}')
+
     extension = mimetypes.guess_extension(content_type)
-    print(extension)
     return extension
 
 
@@ -89,6 +98,7 @@ def list_folders(filepath):
             folder.name,
             size
         ))
+    return folders
 
 
 def get_classifier_and_label(row):
@@ -125,16 +135,27 @@ def get_classifier_and_label(row):
 def write_to_csv(filename, person_list, header):
     with open(filename, 'w', encoding='UTF8') as f:
         writer = csv.writer(f)
-        writer.writerow(header)
-        [writer.writerow(a) for a in person_list]
+        if header:
+            writer.writerow(header)
+        else:
+            [writer.writerow(a) for a in person_list]
         f.close()
         return person_list
 
 
-def write_person_data_to_table(filename, tables):
-    with open(filename, 'w', encoding='UTF8') as f:
+def last_row_from_csv(filename):
+    with open(filename, 'r', encoding='UTF8') as file:
+        reader = csv.reader(file, quotechar='"',
+                            delimiter=',')
+        last_line = list(reader)[-1]
+        return last_line
+    f.close()
+
+
+def add_row_to_csv(filename, data_row):
+    with open(filename, 'a', newline='') as f:
         writer = csv.writer(f)
-        [writer.writerow(row) for row in tables]
+        writer.writerow(data_row)
         f.close()
 
 
@@ -145,17 +166,18 @@ def write_csv_header(filename, header):
         f.close()
 
 
-def is_already_saved(data_row):
+def is_already_saved(data_row, filename):
    # checks if image info is already saved in csv
-    with open('../data-info.csv', "r") as infile:
-        reader = csv.reader(infile)
-        next(reader)
+    with open(filename, "r") as infile:
+        reader = csv.reader(filename, delimiter=',',
+                            quotechar='"', escapechar='\\')
         for line in reader:
-            if [data_row] == line:
-                print('Image already in data-info.csv')
-                return True
-            else:
-                return False
+            for cell in line:
+                if line in data_row:
+                    print('Image already in data-info.csv')
+                    return True
+                else:
+                    return False
 
 
 def sanitize_names_for_folders(names):
@@ -175,7 +197,8 @@ def sanitize_names_for_folders(names):
 
 def get_names_from_csv(file):
     names = []
-    ranks = list(get_labels_from_csv('ss-ranks.csv').keys())
+    ranks = list(get_labels_from_csv('ss-ranks.csv').values())
+
     with open(file, 'r') as csv_file:
         data = csv.reader(csv_file, delimiter=',')
         data = list(data)
@@ -194,3 +217,12 @@ def get_names_from_csv(file):
     csv_file.close()
     names.sort()
     return names
+
+
+def read_json(filename):
+    results = []
+    with open(filename, "r") as read_file:
+        image_dict = json.load(read_file)
+        results = image_dict.get('images_results')
+        read_file.close()
+    return results
