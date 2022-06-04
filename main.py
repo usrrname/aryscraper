@@ -6,56 +6,41 @@ from scrape_names import scrape_ss_names
 from create_folders import create_folders
 from util import get_names_from_csv, sanitize_names_for_folders
 from scraper import download_images
-
+names = get_names_from_csv('ss-info.csv')
+folder_names = sanitize_names_for_folders(names)
+name_map = dict(zip(folder_names, names))
 
 # def process():
 #     print("Creating folders...")
 #     create_folders('data', names)
 #     print("Done!")
+
+
 def download_and_save_err(last_folder, query):
     try:
         download_images(query, 100)
     except Exception as e:
+        os.chdir('../')
         print(e)
-        file = open('../../index.txt', 'w')
-        file.writelines(last_folder)
-        pass
-
-
-def main():
-    names = get_names_from_csv('ss-info.csv')
-    folder_names = sanitize_names_for_folders(names)
-    name_map = dict(zip(folder_names, names))
-    os.chdir('data')
-    last_folder = ''
-
-    # record of last folder and search download that failed
-    if os.path.exists('index.txt'):
-        file = open('index.txt', 'r')
-        last_folder = file.readlines()[0]
+        file = open('failed.txt', 'a')
+        file.writelines(last_folder + '\n')
+    finally:
         folder_index = folder_names.index(last_folder)
-        os.chdir(last_folder)
-        query = name_map[last_folder]
-        download_and_save_err(last_folder, query)
+        next_folder = folder_names[folder_index+1]
+        main(next_folder)
 
-    else:
-        current_path = os.getcwd()
 
-        for fname in folder_names:
-            query = name_map[fname]
+def main(folder_name):
+    if 'data' not in os.getcwd():
+        print(os.getcwd())
+        os.chdir('./data')
 
-            try:
-                os.chdir(f'{current_path}/{fname}')
-                download_images(query, 100)
-            except Exception as e:
-                last_folder = f'{fname}'
-                print(f'Error downloading images from {fname}, {e.args}')
-                file = open('../../index.txt', 'w')
-                file.writelines(last_folder)
-                file.close()
-                continue
+    last_folder = folder_name
+    os.chdir(last_folder)
+    query = name_map[last_folder]
+    download_and_save_err(last_folder, query)
 
 
 if __name__ == '__main__':
     # process()
-    main()
+    main('Professor_Dr_Wilhelm_Pfannenstiel')

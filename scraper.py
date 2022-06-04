@@ -52,7 +52,7 @@ def scrape_images(name, number_of_images, start_number):
         # saves json of response incase of failure
         urllib.request.urlretrieve(
             results['search_metadata']['json_endpoint'], 'data.json')
-        print('data.json for {query} saved!')
+        print(f'data.json for {query} saved!')
         filtered_images = [
             image for image in image_results if image['original']]
     except KeyError in Exception as e:
@@ -100,11 +100,7 @@ def save_images(name, image_urls, next_image_index=0):
 
         # add info about saved image
         try:
-            if not os.path.exists('data-info.csv'):
-                write_csv_header(
-                    'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
-                add_row_to_csv(current_path + '/' + 'data-info.csv', data_row)
-            elif is_already_saved(data_row, 'data-info.csv') == False:
+            if is_already_saved(data_row, 'data-info.csv') == False:
                 add_row_to_csv(current_path + '/' + 'data-info.csv', data_row)
         except Exception as e:
             print(f'\n Failed to Save: data-info.csv at the {i}th file, {e}')
@@ -124,11 +120,8 @@ def lookup_recent_row(csv_file):
 
 def download_images(name, number_of_images):
 
-    if not os.path.exists('raw'):  # if raw images folder doesnt exist, create it
-        os.mkdir('raw') and os.chdir('raw') and write_csv_header(
-            'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
-    else:  # if folder already exists, check for last saved image
-        os.chdir('raw')
+    write_csv_header(
+        'data-info.csv', ["Name", "Filename", "Title", "Position", "Original URL"])
 
     files = os.listdir(os.getcwd())
 
@@ -152,19 +145,11 @@ def download_images(name, number_of_images):
         start_number = 0
         image_urls = []
 
-        if remainder >= 1 and os.path.isfile('data.json'):
-            last_image_index, next_image_index = 0, 1
+        if os.path.isfile('data.json'):
+            last_image_index, next_image_index = 1, 1
             image_results = read_json('data.json')
-
-            # find json file and fetch remaining images
-            if os.path.exists('data-info.csv'):
-                next_image_index, last_image_index = lookup_recent_row(
-                    'data-info.csv')
-                print(
-                    f'last image position: {last_image_index}, next image number: {next_image_index}')
             image_urls = [
-                image for image in image_results if image['position'] > last_image_index]
-
+                image for image in image_results if image['original'] and image['position'] > last_image_index]
             save_images(name, image_urls, next_image_index)
         else:
             start_number = 1
