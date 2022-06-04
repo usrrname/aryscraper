@@ -134,8 +134,7 @@ def get_classifier_and_label(row):
             result = [classifier, label]
         except TypeError in Exception:
             print(TypeError.args)
-            print(TypeError + ': ' +
-                  prospective_label + ' not found in labels')
+            print(TypeError + ': {prospective_label} not found')
     return result
 
 

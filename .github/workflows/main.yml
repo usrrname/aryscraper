@@ -40,8 +40,8 @@ jobs:
       - name: Archive scraped data
         uses: actions/upload-artifact@v3
         with:
-          name: data-set
-          path: ./data-set/**
+          name: data
+          path: ./data/**
           retention-days: 30
 
   publish:
@@ -53,13 +53,13 @@ jobs:
       - name: archive scraped data
         uses: actions/download-artifact@v3
         with:
-          name: data-set
+          name: data
       - name: sync folder
         uses: keithweaver/aws-s3-github-action@main
         with:
           command: cp
-          source: ./data-set/
-          destination: ${{ secrets.S3_BUCKET }}/data-set
+          source: ./data/
+          destination: ${{ secrets.S3_BUCKET }}/data
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: "canada-central-1"

@@ -7,6 +7,6 @@ env/
 /dist/
 .env
 venv/
-data-set/*
+data/*
 *-test.csv
 .actrc

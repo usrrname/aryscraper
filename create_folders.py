@@ -5,7 +5,7 @@ from util import list_folders, sanitize_names_for_folders
 
 def create_folders(parent_dir, names):
     folder_names = sanitize_names_for_folders(names)
-    # if data-set folder does not exist, create it
+    # if data folder does not exist, create it
     if os.path.isdir(parent_dir) == False:
         os.mkdir(parent_dir) and os.chdir(parent_dir)
     # if if exists, move into it
