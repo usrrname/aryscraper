@@ -71,11 +71,6 @@ def get_image_link(image_url):
 
 
 def get_image_format(image_url):
-
-    # if not image_url.startswith('http'):
-    #     url = os.path.splitext(image_url)[0]
-    #     image_url = 'https://'.join(url)
-
     response = requests.head(image_url)
     try:
         content_type = response.headers['content-type']
