@@ -6,7 +6,7 @@ import os
 import csv
 import json
 from humanize import naturalsize
-
+import re
 image_extensions = ['.png', '.PNG', '.jpg', '.JPG', '.jpeg', '.tiff',
                     '.tif', '.TIF', '.bmp', '.gif', '.GIF', '.webp', '.svg', '.SVG']
 
@@ -198,13 +198,14 @@ def sanitize_names_for_folders(names):
 
 def get_names_from_csv(file):
     names = []
-    ranks = list(get_labels_from_csv('ss-ranks.csv').values())
+    # ranks = list(get_labels_from_csv('ss-ranks.csv').values())
 
     with open(file, 'r') as csv_file:
         data = csv.reader(csv_file, delimiter=',')
         data = list(data)
         for row in data:
-            if row != [] and row[0] != 'Name' and row[0] not in ranks:
+            if row != [] and row[0] != 'Name':
+                # if row != [] and row[0] != 'Name' and row[0] not in ranks:
                 extracted_name = remove_contents_in_brackets(
                     row[0].strip())
                 extracted_name = extracted_name.replace(
@@ -227,3 +228,10 @@ def read_json(filename):
         results = image_dict.get('images_results')
         read_file.close()
     return results
+
+
+def remove_html_tags(text):
+    """Remove html tags from a string"""
+    import re
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
