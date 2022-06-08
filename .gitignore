@@ -10,3 +10,7 @@ venv/
 data/*
 *-test.csv
 .actrc
+belsen_trial_mugshots/
+female_guards_in_nazi_concentration_camps/
+mug_shots_of_holocaust_perpetrators/
+mug_shots_of_nazis/
