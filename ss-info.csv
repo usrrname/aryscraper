@@ -3,7 +3,7 @@ Adolf Hitler,Oberster Führer der Schutzstaffel,1,1934–1945,DAP: 5553 680,0.1,
 Julius Schreck,First Reichsführer-SS 1925–1926 Hitler's chauffeur Later held the ranks of SS-Standartenführer and SS-Oberführer Posthumously awarded the ranks SS-Brigadeführer and SS-Ehrenführer of the SS Regiment Munich,5,Leader of the Stoßtrupp-Hitler  forerunner of the SS (1923); officially joined SS (1925),53,1.1,Reichsführer
 Joseph Berchtold,Second Reichsführer-SS 1926–1927,,Co-leader of the Stoßtrupp-Hitler; forerunner of the SS (1923),750,1.1,Reichsführer
 Erhard Heiden,Third Reichsführer-SS 1927–1929,,Member of the Stoßtrupp-Hitler  forerunner of the SS (1923); officially joined SS (1925),74,1.1,Reichsführer
-Heinrich Himmler,Fourth Reichsführer-SS1929–1945 Chief of German Police Minister of the Interior Chief of the replacement Army,168,2 August 1925,14303,1.1,Reichsführer
+Heinrich Himmler,Fourth Reichsführer-SS 1929–1945 Chief of German Police Minister of the Interior Chief of the replacement Army,168,2 August 1925,14303,1.1,Reichsführer
 Karl Hanke,Final Reichsführer-SS1945,203013,15 February 1933,102606,1.1,Reichsführer
 Kurt Daluege,Commander of the Ordnungspolizei (Orpo-Order Police),1119,1928,31981,1.2,Oberst-Gruppenführer
 Sepp Dietrich,Original commander of the Leibstandarte SS Adolf Hitler (LSSAH) and later commander of the 6th SS Panzer Army,1177,5 May 1928,89015,1.2,Oberst-Gruppenführer
@@ -183,7 +183,7 @@ Karl Pflomm,SS-Brigadeführer and Generalmajor der Polizei,2913,,304896,1.5,Brig
 Hans Plesch,SS-Brigadeführer and Generalmajor der Polizei,4339,,347695,1.5,Brigadeführer
 Anton Reinthaller,Brigadeführer and a member of Reichstag,292775,December 1938,,1.5,Brigadeführer
 Ernst August Rode,Born 9 August 1894. Served in World War I and postwar in  Freikorps Leib-Kurassier-Regiment Großer Kurfürst until 25 July 1919 and then became a member of the Schutzpolizei.  In December 1939 he was appointed commander of a battalion of the Security Police (Sipo) in Bydgoszcz. He was also deployed in Białystok. He became First General Staff Officer (Ia) to the Commander of the Order Police (BdO) in Norway. At the end of August 1940 he was appointed deputy commander of the Moravian Police Regiment in Brno. From 6 February 1941 to 22 May 1941 he commanded the Police Battalion 315  leading the battalion from April to May 1941 in newly occupied Yugoslavia.From 16 May 1941 he was employed as a Fourth General Staff Officer (Id; responsible for training and organization) and deputy of the First General Staff Officer (Ia) at the Kommandostab Reichsführer SS in the Hauptamt zur Partisanenbekämpfung. In August 1943 he was temporarily given command of the Latvian SS Volunteer Brigade. In September 1943 he was appointed liaison officer to the command posts of the Wehrmacht on the staff of the Chief of the Gang Fighting Units (BKV)  which led the fight against the partisans. He was promoted to SS Brigadeführer and Major General of the Waffen-SS with effect from 21 June 1944. The promotion to Major General of the Schutzpolizei was also set for this date. He was appointed Chief of Staff of Bach-Zelewski as successor to SS-Standartenführer Heinz Lammerding in the summer of 1944  retaining his command as Chief of the Command Staff Reichsführer SS. Involved in suppression of Warsaw Uprisng 1944. Witness in Nuremberg Trials. Died 12 September 1955 Gottingen.,401 399,1 July 1941,1 937 929,1.5,Brigadeführer
-Dr. Bruno Karl Hermann Rothardt.,Born 21 August 1891 in Danzig  Prussia. SS-Brigadeführer und Generalmajor der Waffen-SS Dr.med. Died on 28 April 1980 Niefern-Öschelbronn.,276754,,430880,1.5,Brigadeführer
+Bruno Rothardt.,Born 21 August 1891 in Danzig  Prussia. SS-Brigadeführer und Generalmajor der Waffen-SS Dr.med. Died on 28 April 1980 Niefern-Öschelbronn.,276754,,430880,1.5,Brigadeführer
 Joachim Rumohr,Brigadeführer und Generalmajor of the Waffen-SS,7450,1933,216161,1.5,Brigadeführer
 Karl Schäfer,SS and Police Leader (SSPF) Weissruthenien; Dnjepropetrowsk-Krivoi-Rog. Killed in action  2 November 1943.,20865,October 1931,419439,1.5,Brigadeführer
 Walter Schellenberg,SD officer and second Chief of the Ausland-SD  Amt VI (Department VI) of the RSHA,124817,10 January 1934,3504508,1.5,Brigadeführer
@@ -216,8 +216,6 @@ Fritz Witt,First commander of the 12th SS Panzer Division Hitlerjugend. Awarded 
 Karl Emil Wrobel,Born 26 February 1882 Breslau. Held the rank of Generalarzt der Polizei. Surrendered at the Battle of Berlin 2 May 1945. Died 2 October 1949 Suja Schuga.,,,,1.5,Brigadeführer
 Gustav Adolf von Wulffen,Born 18 April 1878. Awarded Pour le Merite 21 April 1918. Died of Wounds 4 May 1945.,72208,1931,495764,1.5,Brigadeführer
 Karl Arthur Zenner,Born 11 June 1899. SS-Brigadeführer und Generalmajor der Polizei. Died 16 June 1969,176,August 1926,13539,1.5,Brigadeführer
-Name,Position,SS number,Joined SS,Party number,Class,Label
-Oberführer (1926–1945),2.1,Oberführer,,,,
 Humbert Achamer-Pifrader,Born 21 November 1900 in Teplitz-Schönau  Married Maria Hauser in 1929  Joined NSDAP on 10 November 1931  SS-Oberführer and Oberst der Polizei  Einsatzgruppe A Commander (10 September 1942 – 4 September 1943)  head of the Gestapo in Darmstadt in 1940  Inspector of the SiPo and SD in Wiesbaden July 1942  Inspector of the SiPo and SD in Berlin September 1943. Died 25 April 1945 in Linz,275750,September 1935,614104,2.1,Oberführer
 Josef Altstötter,Member of Reich Ministry of Justice; member of SA # 31; tried 1947 in Judges' Trial-released 1950-died 1979,289254,15 May 1937,5823836,2.1,Oberführer
 Adolf Ax,Waffen-SS commander. Chief of Staff of the Commander of the Waffen-SS in The Netherlands 1942-1944,3848,1 December 1930,378043,2.1,Oberführer
@@ -269,8 +267,6 @@ Ferdinand von Sammern-Frankenegg,Born 17.3.1897 Grieskirchen. Stub: 9 November 1
 Paul Gebhard Gustav Werner,Born 4.11.1900. Served in World War I 1918. Also served in SS Security service; also a deputy to Arthur Nebe and Friedrich Panzinger. Involved in the Shoah; SS Oberführer and Oberst Der Polizei. Died 15. Feb 1970 Leinfelden,290389,5 November 1937,3025030,2.1,Oberführer
 Gustav Adolf Wiemann,Waffen-SS Officer and son-in-law of SS-Oberstgruppenführer Paul Hausser,,1938,,2.1,Oberführer
 Arpad Wigand,SS and Police leader (SS-und Polizeiführer (SSPF)) in Warsaw from 4 August 1941 until 23 April 1943. Aide to Erich von dem Bach Zelewski. In 1981  Wigand was found guilty in Hamburg for war crimes and was sentenced to 12.5 years.,2999,,30682,2.1,Oberführer
-Name,Position,SS number,Joined SS,Party number,Class,Label
-Standartenführer (1925–1945),2.2,Standartenführer,,,,
 Humbert Achamer-Pifrader,Born 21 November 1900 Bohemia. Served in Austrian Army in World War I. In 1935 chief of Gestapo in Darmstadt. By July 1942  he was Chief of Security Police and SD in Wiesbaden. In September 1942 he became commander of Einsatzgruppen A  which was responsible for the mass murder of civilians (mostly Jewish). In addition  he was commander of the Security Police (SiPo) in Riga. On 31 August 1943  awarded with the Iron Cross 2nd Class award. In 1944 he returned to the Reich Security Main Office in Berlin and took over as Chief of Security Police in the field units of the Unit IV B. Killed in air raid 21 April 1945,275.750,September 1935,614.104,2.2,Standartenführer
 Gunter d'Alquen,Born 24 October 1910. Chief of Propaganda OKW; Editor of Das Schwarze Korps;Commander of the SS-Standarte Kurt Eggers. Died 15 May 1988.,8452,1931,66.689,2.2,Standartenführer
 Ludolf Jakob von Alvensleben,Born 9 August 1899. A senior staff member of the Operation Reinhard group assigned by Reichsführer-SS Heinrich Himmler to systematically murder the Jews of Europe. He ended the war as SS and Police Leader (SSPF) of Adria-West  Northern Italy. He escaped investigation after the war and is reported to have died when his car overturned on a road outside Dortmund. Died 23 August 1953,52.195,,1.313.391,2.2,Standartenführer
@@ -323,8 +319,6 @@ Günther Tamaschke,Born 26 February 1896. Commandant of the Lichtenburg and Rave
 Hilmar Wäckerle,First commandant of Dachau concentration camp,9.729,1 March 1931,530.715,2.2,Standartenführer
 Ernst Woermann,Born 30 March 1888. On 11 April 1949 Woermann was sentenced to 7 years in prison. On 12 December  it was lowered to 5 years. However  he was released early in 1950 or 1951. Died 5 July 1979.,,,4.789.453,2.2,Standartenführer
 Wilhelm Zander,Born 22 April 1911. Was an adjutant to Martin Bormann. Died 27 September 1974.,27789,,552659,2.2,Standartenführer
-Name,Position,SS number,Joined SS,Party number,Class,Label
-Obersturmbannführer (1933–1945),2.3,Obersturmbannführer,,,,
 Fritz Arlt,Born 12 April 1912. Died 21 April 2004,,,1.376.685,2.3,Obersturmbannführer
 Georg Betz,Born 15 June 1903. SS officer who served as Adolf Hitler's personal co-pilot and Hans Baur's substitute. Died 2 May 1945,625419,1932,,2.3,Obersturmbannführer
 Helmut Bischoff,Gestapo chief of Poznań and Magdeburg; director of security for the V-weapons program,272403,November  1935,203122,2.3,Obersturmbannführer
@@ -465,7 +459,7 @@ Walter Hugo Stamm,Born 1904. Connected with the SD and Section IV {Gestapo} Wars
 Karl Streibel,Specialist Officer attached to Staff Oberabschnitt Ost as referent zbz in Arbeitsstab der Allgemeine SS Lublin; duty as leiter der Ausbildungslager Trawinki in stab SSPF Lublin,60152,,554023,2.4,Sturmbannführer
 Karl Otto von Salisch,member of SD; aka Captain von Seidlitz involved in Venlo incident,,,,2.4,Sturmbannführer
 Karl Freiherr Michel von Tüßling,Born 27. July 1907 in Tüßling  Bavaria. In 1935 summoned to Berlin; from 1936  personal adjutant of Reichsleiter Philipp Bouhler  who was in charge of Hitler's Chancellery (Kanzlei des Führers) and head of the euthanasia programme Aktion T4[10] SS-Sturmbannführer: 30.01.1941[11] Provided affidavit in 1947 to exonerate war criminal Viktor Brack at the Nuremberg trials.[12],56074,April 1933,1726624,2.4,Sturmbannführer
-Dr. Carl Værnet,SS major; physician involved in human experiments,,,,2.4,Sturmbannführer
+Carl Værnet,SS major; physician involved in human experiments,,,,2.4,Sturmbannführer
 Wernher von Braun,Born 23 March 1912. Allgemeine-SS battalion officer (also SS Horseriding Club). Involved with slave labor in V-2 Program. Died 16 June 1977,185068,1940,5 738 692,2.4,Sturmbannführer
 Hans-Georg von Charpentier,Born 16 July 1902. Awarded Knights Cross of the Iron Cross. KIA 9 March 1945,258019,May 1935,1375222,2.4,Sturmbannführer
 Johann von Leers,SS Officer and Propagandist,,,,2.4,Sturmbannführer
@@ -487,7 +481,6 @@ Joachim Boosfeld,SS Obersturmführer,362.256,1939,,2.5,Hauptsturmführer
 Alois Brunner,Born 08.04.1912  Rohrbrunn  Austria. Commandant of Drancy internment camp. Adolf Eichmann's assistant. Postwar alias Dr. Georg Fischer-resident in Syria. Alleged to have been member of West German BND. In 1989 the Syrian Government declined to extradite him to Germany after the fall of the Berlin Wall. Alleged to have been alive as of 2001. Unknown if still alive.,342767,10 August 1939,510 064,2.5,Hauptsturmführer
 Kurt Brunow,Member of the SD,,,,2.5,Hauptsturmführer
 Karl Chmielewski,the Devil of Gusen  Schutzhaftlagerführer at Gusen concentration camp  Commandant of Herzogenbusch concentration camp  Tried and convicted in 1961 of war crimes and crimes against humanity and sentenced to Life Imprisonment,63935,1932,1508254,2.5,Hauptsturmführer
-Christian,member of SD; aka Lieutenant Grosch involved in Venlo incident,,,,2.5,Hauptsturmführer
 Douglas Berneville-Claye,British impostor/forger; member of Staff of III (Germanic) SS Panzer Corps,,,,2.5,Hauptsturmführer
 Johannes Max Clemens,Born 9 Feb 1902. Member of SD and postwar a KGB Spy in Gehlen Organization. Tried 1963 in Hans Felfe Trial and sentenced to 10 years. Died 1976.,,,,2.5,Hauptsturmführer
 Theodor Dannecker,born 27.03.1913 in Tübingen;  SD Belgium  Sonderkommando Eichmann in Sofia and Hungary. Also worked in Department of Jewish affairs as a jewish specialist with Adolf Eichmann.;-suicide 10.12.1945 in Bad Tölz,,,,2.5,Hauptsturmführer
@@ -563,8 +556,6 @@ Paul Werner,Born 05 IX 1890 Dragass/Dragacz]SS-Hauptsturmführer und Kriminalrat
 Harald Franz Wiesmann,Born 22 IV 1909 Krefeld. SS-Hauptsturmführer und Kriminalrat. Became head Referat IV 1 (former IV A) KdS Warschau in May 1944(seriously wounded on 20 VII 1944 during a riot in the Gefängnis der SIPO und des SD Pawiak; died 24 IV 1947 Praha],,,,2.5,Hauptsturmführer
 Michael Wittmann,Born 22 April 1914. Waffen-SS Panzer ace with the LSSAH (branch: Panzertruppe) KIA 8 August 1944,311623,October 1936,,2.5,Hauptsturmführer
 Hans Woellke,Commander of Schutzmannschaft Battalion 118. Killed in combat on 22 March 1943,,,,2.5,Hauptsturmführer
-Name,Position,SS number,Joined SS,Party number,Class,Label
-Obersturmführer (1932–1945),2.6,Obersturmführer,,,,
 Heinz Barth,Born 15 October 1920. Involved in Oradour-sur-Glane massacre of 1944. Arrested 1981; tried 1983 sentenced to life; released 1997. Died 14 August 2007,458037,10 February 1943,7844901,2.6,Obersturmführer
 August Blei,Born 26 August 1893. KZ Mauthaushen. Tried Dachau Trials. Executed 28 May 1947.,454747,,,2.6,Obersturmführer
 Johannes Alfred BÖHM,Born 17 II 1912 chief of Referat IV B (Kirchen  Konfessionen und Sekten) KdS Warschau was SS-Obersturmführer und Kriminalkommissar died Dresden – 1999.,,,,2.6,Obersturmführer

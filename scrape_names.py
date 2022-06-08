@@ -3,6 +3,7 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 from util import get_classifier_and_label, get_labels_from_csv, get_names_from_csv, remove_contents_in_brackets, write_to_csv
+ranks = list(get_labels_from_csv('ss-ranks.csv').values())
 
 
 def request_soupified_response(url):
@@ -53,8 +54,13 @@ def scrape_ss_data(url, filename):
     for table in tables:
         new_table = []
         headings = table.find_all('th')
-        header = [th.text.replace('\n', '') for th in headings]
-        header.extend(['Class', 'Label'])
+
+        header = [th.text.replace('\n', '')
+                  for th in headings if th.text not in ranks]
+        if 'Remarks' in header:
+            header.remove('Remarks')
+
+        header.extend(['Class', 'Label', 'URL'])
         new_table.extend([header])
         rows = table.find_all('tr')
 
@@ -62,12 +68,15 @@ def scrape_ss_data(url, filename):
             # Find all data for each column
             cells = row.find_all('td')
 
-            row_data = [cell.text.replace('\n', '').replace('\xa0', '')
-                        for cell in cells if cell.text not in labels]
+            row_data = [cell.text.replace('\n', ' ').replace(
+                '\xa0', '').strip() for cell in cells if cell.text not in labels or any(rank for rank in ranks)]
+            url = [cell.find('a').get('href')
+                   for cell in cells if cell.find('a') != None]
             try:
                 result = get_classifier_and_label(rows[1])
                 if result != []:
                     row_data.extend(result)
+                row_data.extend([url])
                 new_table.extend([row_data])
             except TypeError in Exception:
                 print(TypeError)
