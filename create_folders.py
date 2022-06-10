@@ -18,29 +18,24 @@ def find_names_in_wikimedia_response(filename, names):
     read_file.close()
 
     page_ids = list(query.keys())
-    image_names = []
 
     for pid in page_ids:
-
+        filename = query[pid]['title'][5:]
         imageinfo = query[pid]['imageinfo'][0]['extmetadata']
         object_name_value = imageinfo['ObjectName']['value']
         object_name = remove_html_tags(object_name_value)
         file_ext = os.path.splitext(query[pid]['title'])[1]
-        description = imageinfo['ImageDescription']['value'] or ''
+        description_value = imageinfo['ImageDescription']['value'] or ''
         originaldate = imageinfo['DateTimeOriginal']['value'] or ''
-        credit = imageinfo['Credit']['value'] or ''
-        parsed_description = remove_html_tags(description)
+        credit_value = imageinfo['Credit']['value'] or ''
+        credit = remove_html_tags(credit_value)
+        description = remove_html_tags(description_value)
         str_match = [
-            s for s in names if s in parsed_description or object_name]
-
-        header = ['Object Name', 'Description', 'Filename', 'Credit']
-        write_csv_header('guards.csv', header)
+            s for s in names if s in description or object_name]
 
         for item in range(len(str_match)):
             folder_name = ''.join(str_match[item]).replace(' ', '_')
             filename = folder_name + file_ext
-            data_row = [object_name, parsed_description, filename, credit]
-            add_row_to_csv('guards.csv', data_row)
 
             if not os.path.exists(folder_name):
                 os.mkdir(folder_name)
@@ -48,9 +43,7 @@ def find_names_in_wikimedia_response(filename, names):
                 if not os.path.exists(filename):
                     continue
                 else:
-                    shutil.move(f'{filename}',
-                                f'{folder_name}/{filename}')
-
+                    shutil.move(f'{filename}', f'{folder_name}/{filename}')
             except Exception as e:
                 print(e)
             finally:
@@ -72,6 +65,3 @@ def create_folders(parent_dir, names):
         else:
             print(f'A folder called {folder} already exists')
     list_folders(os.getcwd())
-
-
-# find_names_in_wikimedia_response('api-result.json', names)
