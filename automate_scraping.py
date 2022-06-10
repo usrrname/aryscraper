@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# this script only works inside /data folder
 import os
 import sys
 from scrape_names import scrape_ss_names
@@ -34,7 +35,6 @@ def download_and_save_err(last_folder, query):
 
 def scrape_one_person(folder_name):
     if 'data' not in os.getcwd():
-        print(os.getcwd())
         os.chdir('./data')
 
     os.chdir(folder_name)
