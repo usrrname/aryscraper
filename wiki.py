@@ -5,8 +5,10 @@ from util import save_as_json
 
 
 def get_abstract(lang, subject):
+    """params: locale, subject = name from names.py"""
 
     url = f'https://{lang}.wikipedia.org/w/api.php'
+    # TODO: translate locale to english
 
     params = {
         "action": "query",
@@ -23,6 +25,8 @@ def get_abstract(lang, subject):
     summary = page['extract']
     links = [{'title': link['title'], 'href': f'https://{lang}.wikipedia.org/wiki/' + link['title'].replace(' ', '_')}
              for link in page['links']]
+
+    # TODO: include s3 url in returned info
     info = {
         'name': subject,
         'extract': summary,
@@ -31,6 +35,8 @@ def get_abstract(lang, subject):
     return info
 
 
+# run script from within image folder
+# entering a name hits wikipedia api and creates a json in the name of the figure
 name = ''
 data = get_abstract('de', name)
 filename = name.replace(' ', '_') + '.json'
