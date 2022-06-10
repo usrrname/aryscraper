@@ -7,7 +7,7 @@ from scrape_names import scrape_ss_names
 from create_folders import create_folders
 from util import get_names_from_csv, sanitize_names_for_folders
 from scraper import download_images, list_images_in_folder
-names = get_names_from_csv('ss-info.csv')
+names = get_names_from_csv('ss-data-links.csv')
 folder_names = sanitize_names_for_folders(names)
 name_map = dict(zip(folder_names, names))
 
