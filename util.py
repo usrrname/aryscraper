@@ -186,13 +186,8 @@ def sanitize_names_for_folders(names):
     for name in names:
         if name != 'Name':
             folder_name = ''.join(name)
-            if len(folder_name.split(' ')) <= 4:
-                folder_name = folder_name.strip().replace(' ', '_')
-                folder_names.append(folder_name)
-            else:
-                name_array = folder_name.split(' ')[: 4]
-                folder_name = ''.join(name_array).strip().replace(' ', '_')
-                folder_names.extend([folder_name])
+            folder_name = folder_name.strip().replace(' ', '_')
+            folder_names.append(folder_name)
     return folder_names
 
 
@@ -235,3 +230,9 @@ def remove_html_tags(text):
     import re
     clean = re.compile('<.*?>')
     return re.sub(clean, '', text)
+
+
+def save_as_json(filename, data):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+    f.close()
