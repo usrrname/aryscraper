@@ -1,18 +1,17 @@
 # Haar cascade face extraction
 import os
-import cv2
+from cv2 import cv2, data
 from glob import glob
-from google.colab.patches import cv2_imshow
+from util import image_extensions, has_img_extension
 
-
-imgdir = './'
+imgdir = os.getcwd()
 save_dir = 'extracted'
-ext = ['svg', 'tiff', 'png', 'jpg', 'gif', 'webp', 'jpeg']  # Image formats
+ext = image_extensions  # Image formats
 
 
 def find_images_in_dir(imgdir):
-    files = []
-    [files.extend(glob(imgdir + '*.' + e)) for e in ext]
+    all_files = os.listdir(imgdir)
+    files = [file for file in all_files if has_img_extension(file)]
     return files
 
 
@@ -20,6 +19,7 @@ files = find_images_in_dir(imgdir)
 filenames = [os.path.splitext(filepath) for filepath in files]
 
 images = [cv2.imread(file) for file in files]
+print(images)
 
 
 def get_filename(image_index, count):
@@ -29,12 +29,14 @@ def get_filename(image_index, count):
 
 
 def haar_cascade_extraction(images):
-    os.mkdir(save_dir)
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+
     for index, image in enumerate(images):
         grayscaled_img = cv2.cvtColor(
             image, cv2.COLOR_BGR2GRAY)  # Convert to grayscale
         face_cascade = cv2.CascadeClassifier(
-            'haarcascade_frontalface_alt2.xml')
+            data.haarcascades + "haarcascade_frontalface_alt2.xml")
         faces = face_cascade.detectMultiScale(grayscaled_img, 1.1, 4)
 
         for count, (x, y, w, h) in enumerate(faces):
@@ -45,10 +47,11 @@ def haar_cascade_extraction(images):
             # Counts up if there is more than one face in image
             filename = get_filename(index, count)
             print(f'Cropping and Saving: {filename}')
-            cv2_imshow(resized)
+            cv2.imshow('', resized)
             cv2.imwrite(filename, resized)
             cv2.waitKey(1)
             cv2.destroyAllWindows()
+
 
 # for testing
 # haar_cascade_extraction(images)
