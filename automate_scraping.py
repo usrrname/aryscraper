@@ -34,6 +34,7 @@ def download_and_save_err(last_folder, query):
 
 
 def scrape_one_person(folder_name):
+    """retrieves google image search result images from SERPAPI for 1 person """
     if 'data' not in os.getcwd():
         os.chdir('./data')
 
@@ -58,6 +59,8 @@ def find_unpopulated_folders(min_imgs, max_images):
 
 
 if __name__ == '__main__':
+
+    """Finds empty folders in which images dont exists and runs scraping on them"""
     os.chdir('data')
     empty_folders = find_unpopulated_folders(5, 100)
 
