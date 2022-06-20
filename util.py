@@ -236,3 +236,14 @@ def save_as_json(filename, data):
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     f.close()
+
+
+def extract_info(lang, page, key):
+    try:
+        result = page[key]
+    except Exception as e:
+        file = open(f'failed_{lang}.txt', 'a')
+        file.writelines(f'{subject} {l} {e}' + '\n')
+        file.close()
+        pass
+    return result
