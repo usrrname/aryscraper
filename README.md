@@ -11,6 +11,29 @@ This is a silly exercise to:
 - [x] finds portraits of their faces with serpapi/google search image api `scraper.py`
 - [x] extracts metadata for each name and saves it all as a JSON file `wiki.py`
 
-About
-============
+## About
+
 AryScraper is the scraper that created the male and female face "Aryan" data sets using photos of Holocaust perpetrators and the SS high command. Note: the whole exercise is arcane and not rooted in science. 
+
+## Presumed Folder Structure
+
+```
+.
+├── Makefile
+├── .github               // github actions
+├── README.md
+├── requirements.txt
+├── __pycache__
+├── test
+├── automate_scraping.py
+├── create_folders.py
+├── haar_cascade.py
+├── names.py
+├── scrape_names.py
+├── scraper.py
+├── ss-ranks.csv
+├── util.py
+├── wiki.py
+├── men                   // images of male faces
+└── women                 // images of female faces
+```
