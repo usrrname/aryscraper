@@ -1,6 +1,8 @@
 from functools import wraps
 import translators as ts
 import os
+from getopt import getopt
+import sys
 import pandas as pd
 import requests
 import json
@@ -9,10 +11,11 @@ import uuid
 
 
 def get_wikidata(lang, subject, filename):
-    # entering a name hits wikipedia api and creates a json in the name of the figure
-    """parameters
-    locale: two letter language locale
-    subject: name of party member
+    """
+    Makes wikipedia api query and returns a dict object with the relevant metadata
+    ===Parameters===
+    lang: two letter language locale like en/de
+    subject: name of party member with spaces, should be an accepted route name for wikipedia query
     filename: filename with .json extension
     """
 
@@ -86,7 +89,7 @@ def get_wikidata(lang, subject, filename):
 
 
 def create_name_filename_map(current_path):
-    """creates a map of the name and the filename by transforming folder name into the raw name"""
+    """Creates a map of the name and the filename by transforming folder name into the raw name"""
     dirnames = []
     filenames = []
 
@@ -100,18 +103,44 @@ def create_name_filename_map(current_path):
     return img_dict
 
 
+def main(argv):
+    dirname = ''
+    outputfile = ''
+    try:
+        opts, args = getopt(
+            argv, "hd:o:", [sys.argv[1:], "dirname=", "ofile="])
+    except getopt.GetoptError as err:
+        print('wiki.py -d <dirname> -o <outputfile> {err}')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print('wiki.py -d {dirname} -o {outputfile}')
+            sys.exit()
+        elif opt in ("-d", "--dirname"):
+            dirname = arg
+        elif opt in ("-o", "--ofile"):
+            outputfile = arg
+        else:
+            assert False, "unhandled option"
 
-folder_map = create_name_filename_map('./women')
-locales = ['en', 'de', 'nl', 'fr', 'pl', 'pt', 'sv', 'lv']
-faces = []
+    print('Input directory is "', dirname)
+    print('Output file is "', outputfile)
 
-for k, v in folder_map.items():
-    for lang in locales:
-        try:
-            person_meta = get_wikidata(lang, k, v)
-            faces.append(person_meta)
-            break
-        except:
-            pass
-        finally:
-            save_as_json('women.json', faces)
+    folder_map = create_name_filename_map(dirname)
+    locales = ['en', 'de', 'nl', 'fr', 'pl', 'pt', 'sv', 'lv']
+    faces = []
+
+    for k, v in folder_map.items():
+        for lang in locales:
+            try:
+                person_meta = get_wikidata(lang, k, v)
+                faces.append(person_meta)
+                break
+            except:
+                pass
+            finally:
+                save_as_json(outputfile, faces)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
