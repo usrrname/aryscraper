@@ -7,9 +7,13 @@ import shutil
 
 
 def find_names_in_wikimedia_response(filename, names):
-    """ finds names in wikimedia commons image api response, 
-    creates folders, 
-    then moves the image into the folder"""
+    """ 
+    Finds names in wikimedia commons image api response, creates folders, 
+    then moves the image into the folder
+    ===Parameters===
+    filename: filepath and name
+    names: list of names
+    """
 
     query = {}
     with open(filename, "r") as read_file:
