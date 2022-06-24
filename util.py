@@ -103,6 +103,15 @@ def list_folders(filepath):
     return folders
 
 
+def get_names_in_folder(folder):
+    os.chdir(folder)
+    current_folders = os.listdir()
+    current_folders.sort()
+    names = [name.replace('_', ' ')
+             for name in current_folders if name != '.DS_Store']
+    return names
+
+
 def get_classifier_and_label(row):
     result = []
     labels_map = get_labels_from_csv('ss-ranks.csv')
