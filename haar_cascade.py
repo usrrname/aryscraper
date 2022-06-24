@@ -53,5 +53,9 @@ def haar_cascade_extraction(images):
             cv2.destroyAllWindows()
 
 
-# for testing
-# haar_cascade_extraction(images)
+if __name__ == '__main__':
+    folder = ''
+    current_path = os.getcwd()
+    if not current_path.endswith(folder):
+        os.chdir(folder)
+        haar_cascade_extraction(images)
