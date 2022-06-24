@@ -19,18 +19,10 @@ files = find_images_in_dir(imgdir)
 filenames = [os.path.splitext(filepath) for filepath in files]
 
 images = [cv2.imread(file) for file in files]
-print(images)
-
-
-def get_filename(image_index, count):
-    (name, extension) = filenames[image_index]
-    filename = f'{save_dir}/{name}-{count}{extension}'
-    return filename
+figure_size = (160, 160)
 
 
 def haar_cascade_extraction(images):
-    if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
 
     for index, image in enumerate(images):
         grayscaled_img = cv2.cvtColor(
@@ -43,9 +35,9 @@ def haar_cascade_extraction(images):
             # Draw rectangle around face
             cv2.rectangle(image, (x, y), (x+w, y+h), (255, 255, 255))
             face = image[y:y + h, x:x + w]
-            resized = cv2.resize(face, (120, 120))
+            resized = cv2.resize(face, figure_size)
             # Counts up if there is more than one face in image
-            filename = get_filename(index, count)
+
             print(f'Cropping and Saving: {filename}')
             cv2.imshow('', resized)
             cv2.imwrite(filename, resized)
@@ -54,7 +46,7 @@ def haar_cascade_extraction(images):
 
 
 if __name__ == '__main__':
-    folder = ''
+    folder = 'men./'
     current_path = os.getcwd()
     if not current_path.endswith(folder):
         os.chdir(folder)
