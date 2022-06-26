@@ -32,6 +32,7 @@ def extract_face(filename, required_size):
 
 def plot_gallery(folders, titles, rows, cols, filename):
     """Plot a gallery of portraits"""
+
     mpl.rcParams['font.size'] = 10
     mpl.rcParams['figure.figsize'] = (1.8 * cols, 2.4 * rows)
  # specify folder to plot
@@ -65,12 +66,35 @@ def plot_gallery(folders, titles, rows, cols, filename):
                 os.chdir('..')
                 i += 1
     plt.show()
+
     # TODO: add save function
 
 
+def save_img(filename, face):
+    plt.imsave(filename, face)
+
+
 if __name__ == '__main__':
-    folder = ''
-    current_path = os.getcwd()
-    if not current_path.endswith(folder):
-        os.chdir(folder)
-    plot_gallery(folder, names, 9, 9, '')
+    # TODO: add sysargs for flags and variables
+    target_folder = 'men'
+    save_dir = 'extracted'
+    folders = os.listdir(target_folder)
+
+    if not os.path.exists('extracted'):
+        os.mkdir('extracted')
+
+    for subfolder in folders:
+        if subfolder.replace('_', ' ') in einsatzgruppen:
+            files = os.listdir(target_folder + '/' + subfolder)
+            path = [filepath for filepath in files if filepath !=
+                    '.DS_Store'][0]
+            face = extract_face(target_folder + '/' +
+                                subfolder + '/' + path, required_size)
+
+            filename = save_dir + '/' + subfolder + '.jpg'
+            if filename not in os.listdir(save_dir):
+                try:
+                    save_img(filename, face)
+                except Exception as err:
+                    print(err)
+                    pass
