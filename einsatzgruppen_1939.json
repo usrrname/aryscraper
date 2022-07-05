@@ -1,107 +1,122 @@
 [
-    {
-        "name": "Bruno Streckenbach",
-        "group": "Einsatzgruppe I - Wien (14th Army)",
-        "role": "SS-Standartenführer, Commander of Einsatzgruppe I - Wien (14th Army)"
-    },
-    {
-        "name": "Emanuel Schäfer",
-        "group": "Einsatzgruppe II – Oppeln (10th Army)",
-        "role": "SS-Obersturmbannführer, Commander of Einsatzgruppe II – Oppeln (10th Army)"
-    },
-    {
-        "name": "Hans Fischer",
-        "group": "Einsatzgruppe III – Breslau (8th Army)",
-        "role": "SS-Obersturmbannführer, Commander of Einsatzgruppe III – Breslau (8th Army)"
-    },
-    {
-        "name": "Lothar Beutel ",
-        "group": "Einsatzgruppe IV – Dramburg (4th Army)",
-        "role": "SS-Brigadeführer, Commander of Einsatzgruppe IV – Dramburg (4th Army)"
-    },
-    {
-        "name": "Ernst Damzog",
-        "group": "Einsatzgruppe V – Allenstein (3rd Army)",
-        "role": "SS-Standartenführer, Commander of Einsatzgruppe V – Allenstein (3rd Army)"
-    },
-    {
-        "name": "Erich Naumann",
-        "group": "Einsatzgruppe VI (Wielkopolska area)",
-        "role": "SS-Oberführer, Commander of Einsatzgruppe VI (Wielkopolska area)"
-    },
-    {
-        "name": "Udo von Woyrsch",
-        "group": "Einsatzgruppe z. B.V. (Upper Silesia and Cieszyn Silesia areas)",
-        "role": "SS-Obergruppenführer (1939), Commander of Einsatzgruppe z. B.V. (Upper Silesia and Cieszyn Silesia areas)"
-    },
-    {
-        "name": "Rudolf Tröger",
-        "group": "Einsatzkommando 16 – Danzig (Pomorze area)",
-        "role": "SS-Sturmbannführer, Commander of Einsatzkommando 16 – Danzig (Pomorze area)"
-    },
-    {
-        "name": "Ludwig Hahn",
-        "group": "Einsatzgruppe I, Einsatzkommando 1/I",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Bruno Müller",
-        "group": "Einsatzgruppe I, Einsatzkommando 2/I",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Alfred Hasselberg",
-        "group": "Einsatzgruppe I, Einsatzkommando 3/I",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Karl Brunner",
-        "group": "Einsatzgruppe I, Einsatzkommando 4/I",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Otto Sens",
-        "group": "Einsatzgruppe II, Einsatzkommando 1/II",
-        "role": "SS-Obersturmbannführer"
-    },
-    {
-        "name": "Karl-Heinz Rux",
-        "group": "Einsatzgruppe II, Einsatzkommando 2/II",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Helmut Bischoff",
-        "group": "Einsatzgruppe IV, Einsatzkommando 1/IV",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Walter Hammer",
-        "group": "Einsatzgruppe IV, Einsatzkommando 2/IV",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Heinz Gräfe",
-        "group": "Einsatzgruppe V, Einsatzkommando 1/V",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Robert Schefer",
-        "group": "Einsatzgruppe V, Einsatzkommando 2/V",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Walter Albath",
-        "group": "Einsatzgruppe V, Einsatzkommando 3/V",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Franz Sommer",
-        "group": "Einsatzgruppe VI, Einsatzkommando 1/VI",
-        "role": "SS-Sturmbannführer"
-    },
-    {
-        "name": "Gerhard Flesch",
-        "group": "Einsatzgruppe VI, Einsatzkommando 2/VI",
-        "role": "SS-Sturmbannführer"
-    }
+  {
+    "name": "Reinhard Heydrich",
+    "group": "Chief of Security Police and SD, or CSSD",
+    "role": "SS-Obergruppenführer und General der Polizei"
+  },
+  {
+    "name": "Heinrich Himmler",
+    "group": "Chief of Security Police and SD, or CSSD",
+    "role": "Reichsführer-SS"
+  },
+  {
+    "name": "Ernst Kaltenbrunner",
+    "group": "Chief of Security Police and SD, or CSSD",
+    "role": "SS-Obergruppenführer"
+  },
+  {
+    "name": "Bruno Streckenbach",
+    "group": "Einsatzgruppe I - Wien (14th Army)",
+    "role": "SS-Standartenführer, Commander of Einsatzgruppe I - Wien (14th Army)"
+  },
+  {
+    "name": "Emanuel Schäfer",
+    "group": "Einsatzgruppe II – Oppeln (10th Army)",
+    "role": "SS-Obersturmbannführer, Commander of Einsatzgruppe II – Oppeln (10th Army)"
+  },
+  {
+    "name": "Hans Fischer",
+    "group": "Einsatzgruppe III – Breslau (8th Army)",
+    "role": "SS-Obersturmbannführer, Commander of Einsatzgruppe III – Breslau (8th Army)"
+  },
+  {
+    "name": "Lothar Beutel ",
+    "group": "Einsatzgruppe IV – Dramburg (4th Army)",
+    "role": "SS-Brigadeführer, Commander of Einsatzgruppe IV – Dramburg (4th Army)"
+  },
+  {
+    "name": "Ernst Damzog",
+    "group": "Einsatzgruppe V – Allenstein (3rd Army)",
+    "role": "SS-Standartenführer, Commander of Einsatzgruppe V – Allenstein (3rd Army)"
+  },
+  {
+    "name": "Erich Naumann",
+    "group": "Einsatzgruppe VI (Wielkopolska area)",
+    "role": "SS-Oberführer, Commander of Einsatzgruppe VI (Wielkopolska area)"
+  },
+  {
+    "name": "Udo von Woyrsch",
+    "group": "Einsatzgruppe z. B.V. (Upper Silesia and Cieszyn Silesia areas)",
+    "role": "SS-Obergruppenführer (1939), Commander of Einsatzgruppe z. B.V. (Upper Silesia and Cieszyn Silesia areas)"
+  },
+  {
+    "name": "Rudolf Tröger",
+    "group": "Einsatzkommando 16 – Danzig (Pomorze area)",
+    "role": "SS-Sturmbannführer, Commander of Einsatzkommando 16 – Danzig (Pomorze area)"
+  },
+  {
+    "name": "Ludwig Hahn",
+    "group": "Einsatzgruppe I, Einsatzkommando 1/I",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Bruno Müller",
+    "group": "Einsatzgruppe I, Einsatzkommando 2/I",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Alfred Hasselberg",
+    "group": "Einsatzgruppe I, Einsatzkommando 3/I",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Karl Brunner",
+    "group": "Einsatzgruppe I, Einsatzkommando 4/I",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Otto Sens",
+    "group": "Einsatzgruppe II, Einsatzkommando 1/II",
+    "role": "SS-Obersturmbannführer"
+  },
+  {
+    "name": "Karl-Heinz Rux",
+    "group": "Einsatzgruppe II, Einsatzkommando 2/II",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Helmut Bischoff",
+    "group": "Einsatzgruppe IV, Einsatzkommando 1/IV",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Walter Hammer",
+    "group": "Einsatzgruppe IV, Einsatzkommando 2/IV",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Heinz Gräfe",
+    "group": "Einsatzgruppe V, Einsatzkommando 1/V",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Robert Schefer",
+    "group": "Einsatzgruppe V, Einsatzkommando 2/V",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Walter Albath",
+    "group": "Einsatzgruppe V, Einsatzkommando 3/V",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Franz Sommer",
+    "group": "Einsatzgruppe VI, Einsatzkommando 1/VI",
+    "role": "SS-Sturmbannführer"
+  },
+  {
+    "name": "Gerhard Flesch",
+    "group": "Einsatzgruppe VI, Einsatzkommando 2/VI",
+    "role": "SS-Sturmbannführer"
+  }
 ]

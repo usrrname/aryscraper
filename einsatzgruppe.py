@@ -1,12 +1,12 @@
 
 from util import save_as_json
-einsatzgruppen = ['Adolf Ott', 'Theodor Christensen', 'Albert Widmann', 'Albert Rapp', 'Alfred Filbert', 'Alfred Hasselberg', 'Alois Persterer', 'Anton Fest', 'Arpad Wigand', 'Arthur Nebe', 'August Becker', 'August Meyszner', 'Bernhard Baatz', 'Bruno Müller', 'Bruno Sattler', 'Bruno Streckenbach', 'Eduard Strauch', 'Emanuel Schäfer', 'Emil Augsburg', 'Emil Haussmann', 'Erhard Kroeger', 'Erich Ehrlinger', 'Erich Isselhorst', 'Eduard Jedamzik', 'Erich Naumann', 'Erich von dem Bach-Zelewski', 'Ernst Biberstein', 'Ernst Damzog', 'Ernst Kaltenbrunner', 'Erwin Schulz', 'Eugen Steimle', 'Felix Landau', 'Felix Rühl', 'Franz Six', 'Franz Sommer', 'Friedrich Sühr', 'Franz Walter Stahlecker', 'Friedrich-Wilhelm Bock', 'Friedrich Buchardt', 'Friedrich Jeckeln', 'Friedrich Panzinger', 'Friedrich Peter', 'Fritz Mauer', 'Fritz Liphardt', 'Gerhard Bast', 'Gerhard Flesch', 'Gustav Adolf Nosske', 'Gustav Adolf Scheel', 'Günther Hermann',
-                  'Günther Herrmann', 'Friedrich Sühr', 'Fritz Braune', 'Hans Schindhelm', 'Fritz Weitzel', 'Günther Rausch', 'Hans Bothmann', 'Hans Ehlich', 'Hans Fischer', 'Hans Krueger',  'Waldemar Krause', 'Hans-Adolf Prützmann', 'Hans-Joachim Böhme', 'Hans Unglaube', 'Heinrich Fehlis', 'Heinrich Seetzen', 'Heinz Gräfe', 'Heinz Jost', 'Heinz Schubert', 'Helmut Bischoff', 'Helmut Looss', 'Helmut Oberlander', 'Helmut Rauca', 'Herbert Cukurs', 'Herbert Kappler', 'Herbert Lange', 'Herbert Wahler', 'Hermann Hubig', 'Hermann Schaper', 'Horst Böhme', 'Humbert Achamer-Pifrader', 'Joachim Deumling', 'Joachim Freitag', 'Joachim Hamann', 'Johannes Thümmler', 'Josef Albert Meisinger', 'Josef Blösche', 'Josef Kreuzer', 'Josef Auinger', 'Josef Witiska', 'Karl Brunner', 'Karl Eberhard Schöngarth', 'Karl Jäger', 'Karl-Heinz Rux', 'Karl Tschierschky', 'Kurt Graaf', 'Kurt Matschke', 'Lothar Fendler', 'Ludwig Hahn', 'Ludwig Teichmann', 'Manfred Pechau', 'Martin Sandberger', 'Martin Weiss', 'Matthias Graf', 'Odilo Globocnik', 'Otto Bradfisch', 'Otto Hellwig', 'Otto Ohlendorf', 'Oswald Poche', 'Otto Rasch', 'Otto Sens', 'Paul Blobel',  'Paul Schultz', 'Paul Zapp', 'Peter Egner', 'Peter Kroeger', 'Pieter Menten', 'Reinhard Breder', 'Rudolf Batz', 'Richard Korherr', 'Robert Schefe', 'Rudolf Korndörfer', 'Rudolf Lange', 'Rudolf Neugebauer', 'Rudolf Tröger', 'Theo Saevecke', 'Udo von Woyrsch', 'Waldemar Klingelhöfer', 'Waldemar von Radetzky', 'Walter Albath', 'Walter Blume', 'Walter Haensch', 'Walter Hammer', 'Walter Hoffmann', 'Walter Huppenkothen', 'Walter Kutschmann', 'Walter Rauff', 'Walther Bierkamp', 'Werner Braune', 'Wilhelm Fuchs', 'Wilhelm Scharpwinkel', 'Wilhelm Wiebens', 'Willi Wolter', 'Willi Seibert', 'Wolfgang Birkner', 'Wolfgang Kügler']
 
-invasion_of_poland = {
-    'description': 'The first eight Einsatzgruppen of World War II were formed in 1939 for the invasion of Poland. They were made up of Gestapo , Kripo and SD officials, deployed during Operation Tannenberg and the Intelligencektion until the spring of 1940; followed by the German AB-Aktion which ended at the end of 1940. Long before the attack on Poland, the Nazis, aided by the German minority living in the Second Polish Republic, drew up a list of Polish personalities containing the names of 61 000 members of the Polish elite. The list, printed in a 192-page book, is titled Sonderfahndungsbuch Polen. It is composed only of names and dates of birth of politicians, scholars, actors, intelligentsia, doctors, lawyers, nobility, priests, officers and many other people, put available for Einsatzgruppen and Volksdeutscher Selbstschutz. At the end of 1939, 50,000 Poles and Jews were murdered by these groups in the annexed territories, including more than 1,000 prisoners of war. The operational groups of the SS received Roman numerals for the first time on September 4, 1939. Before that, their names came from the names of their places of origin in the German language.',
+einsatzgruppen1939 = {
+    'description': 'The first eight Einsatzgruppen of WWII were formed to aid the invasion of Poland on 1 September 1939. The Einsatzgruppen were paramilitary mobile killing squads that operated under the administration of the Schutzstaffel (SS), They were made up of Gestapo , Kripo and SD officials, deployed during Operation Tannenberg and the Intelligencektion until the spring of 1940; followed by the German AB-Aktion which ended at the end of 1940. Long before the attack on Poland, the Nazis, aided by the German minority living in the Second Polish Republic, drew up a list of Polish personalities containing the names of 61 000 members of the Polish elite. The list, printed in a 192-page book, is titled Sonderfahndungsbuch Polen. It is composed only of names and dates of birth of politicians, scholars, actors, intelligentsia, doctors, lawyers, nobility, priests, officers and many other people, put available for Einsatzgruppen and Volksdeutscher Selbstschutz. At the end of 1939, 50,000 Poles and Jews were murdered by these groups in the annexed territories, including more than 1,000 prisoners of war. The Einsatzgruppen performed murders with the support of the Volksdeutscher Selbstschutz, a paramilitary group consisting of ethnic Germans living in Poland.',
     'Chief of Security Police and SD, or CSSD': {
         'Reinhard Heydrich': 'SS-Obergruppenführer und General der Polizei',
+        'Heinrich Himmler': 'Reichsführer-SS',
+        'Ernst Kaltenbrunner': 'SS-Obergruppenführer',
     },
     'Einsatzgruppe I - Wien (14th Army)': {
         'Commander': {
@@ -392,10 +392,13 @@ ignore_keys = ['established', 'disbanded', 'description', 'locations']
 
 include_keys = ['Commander', 'Adjutant']
 
-einsatz1939_commanders = [{'name': list(v.keys())[0], 'group': key, 'role': list(v.values())[
-    0] + ', Commander of ' + key} for key, value in invasion_of_poland.items() if key not in ignore_keys for k, v in value.items() if k in include_keys]
+einsatz1939_leaders = [{'name': item, 'group': 'Chief of Security Police and SD, or CSSD', 'role': value}
+                       for item, value in einsatzgruppen1939['Chief of Security Police and SD, or CSSD'].items()]
 
-einsatz1939_officers = [{'name': list(v.keys())[0], 'group': 'Einsatzgruppe ' + key.split(' ')[1] + ', ' + k, 'role': list(v.values())[0]} for key, value in invasion_of_poland.items(
+einsatz1939_commanders = [{'name': list(v.keys())[0], 'group': key, 'role': list(v.values())[
+    0] + ', Commander of ' + key} for key, value in einsatzgruppen1939.items() if key not in ignore_keys for k, v in value.items() if k in include_keys]
+
+einsatz1939_officers = [{'name': list(v.keys())[0], 'group': 'Einsatzgruppe ' + key.split(' ')[1] + ', ' + k, 'role': list(v.values())[0]} for key, value in einsatzgruppen1939.items(
 ) if key not in ignore_keys for k, v in value.items() if 'kommando' in k]
 
 
@@ -408,10 +411,16 @@ einsatz1941_commanders = [{'name': list(v.keys())[0], 'group': key, 'role': list
 einsatz1941_officers = [{'name': list(v.keys())[0], 'group': 'Einsatzgruppe ' + key.split(' ')[1] + ', ' + k, 'role': list(v.values())[0]} for key, value in einsatzgruppen_1941.items(
 ) if key not in ignore_keys for k, v in value.items() if 'kommando' in k and v not in ignore_keys]
 
-einsatzgruppen_1939 = einsatz1939_commanders + einsatz1939_officers
+einsatzgruppen_1939 = einsatz1939_leaders + \
+    einsatz1939_commanders + einsatz1939_officers
 
 einsatzgruppen_1941 = einsatz1941_leaders + \
     einsatz1941_commanders + einsatz1941_officers
 
+save_as_json('einsatzgruppen_1939.json', einsatzgruppen_1939)
+save_as_json('einsatzgruppen_1941.json', einsatzgruppen_1941)
 
-einsatzgruppen_all = einsatzgruppen_1939 + einsatzgruppen_1941
+einsatzgruppen_all = einsatz1941_leaders + einsatz1939_commanders + \
+    einsatz1939_officers + einsatz1941_commanders + einsatz1941_officers
+
+einsatzgruppen = [person['name'] for person in einsatzgruppen]
