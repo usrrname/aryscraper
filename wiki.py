@@ -42,6 +42,10 @@ def get_wikidata(lang, subject, filename):
 
     response = requests.get(url, params)
     data = response.json()
+    url = ''
+    if response.status_code == 200:
+        url = f'https://{lang}.wikipedia.org/wiki/{wiki_query}'
+
     page = next(iter(data['query']['pages'].values()))
 
     id = uuid.uuid4()
@@ -79,6 +83,7 @@ def get_wikidata(lang, subject, filename):
         'id': str(id),
         'name': subject,
         'src': img_url,
+        'url': url,
         'filename': filename,
         'description': extract,
         'about': description,
