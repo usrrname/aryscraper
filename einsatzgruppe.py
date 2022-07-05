@@ -414,4 +414,4 @@ einsatzgruppen_1941 = einsatz1941_leaders + \
     einsatz1941_commanders + einsatz1941_officers
 
 
-save_as_json('einsatzgruppen_1941.json', einsatzgruppen_1941)
+einsatzgruppen_all = einsatzgruppen_1939 + einsatzgruppen_1941
