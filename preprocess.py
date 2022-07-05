@@ -6,7 +6,7 @@ from numpy import asarray
 from PIL import Image
 import os
 from mtcnn import MTCNN
-from names import women, einsatzgruppen, men
+from names import women, einsatzgruppen_all, men
 
 required_size = (224, 224)
 
@@ -75,6 +75,7 @@ def save_img(filename, face):
 
 
 if __name__ == '__main__':
+
     # TODO: add sysargs for flags and variables
     target_folder = 'men'
     save_dir = 'extracted'
