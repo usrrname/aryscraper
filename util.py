@@ -81,37 +81,6 @@ def get_image_format(image_url):
     return extension
 
 
-def get_folder_size(path, start_size):
-
-    for file_ in Path(path).rglob('**/*'):
-
-        start_size += file_.stat().st_size
-
-    return naturalsize(start_size)
-
-
-def list_folders(filepath):
-    current_folder = Path(filepath)
-    folders = [f for f in current_folder.rglob('**/*') if f.is_dir()]
-    for folder in folders:
-        size = get_folder_size(folder, folder.stat().st_size)
-        print("{:<8} {:<15} {:<10}".format(
-            folder.parent.name,
-            folder.name,
-            size
-        ))
-    return folders
-
-
-def get_names_in_folder(folder):
-    os.chdir(folder)
-    current_folders = os.listdir()
-    current_folders.sort()
-    names = [name.replace('_', ' ')
-             for name in current_folders if name != '.DS_Store']
-    return names
-
-
 def get_classifier_and_label(row):
     result = []
     labels_map = get_labels_from_csv('ss-ranks.csv')
@@ -190,16 +159,6 @@ def is_already_saved(data_row, filename):
                     return False
 
 
-def sanitize_names_for_folders(names):
-    folder_names = []
-    for name in names:
-        if name != 'Name':
-            folder_name = ''.join(name)
-            folder_name = folder_name.strip().replace(' ', '_')
-            folder_names.append(folder_name)
-    return folder_names
-
-
 def get_names_from_csv(file):
     names = []
     # ranks = list(get_labels_from_csv('ss-ranks.csv').values())
@@ -245,14 +204,3 @@ def save_as_json(filename, data):
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     f.close()
-
-
-def extract_info(lang, page, key):
-    try:
-        result = page[key]
-    except Exception as e:
-        file = open(f'failed_{lang}.txt', 'a')
-        file.writelines(f'{subject} {l} {e}' + '\n')
-        file.close()
-        pass
-    return result

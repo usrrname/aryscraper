@@ -1,6 +1,7 @@
 import os
 import json
 from scraper import download_images
+from folder_utils import list_folders
 from util import list_folders, sanitize_names_for_folders, get_names_from_csv, remove_html_tags, write_csv_header, write_to_csv, add_row_to_csv
 from bs4 import BeautifulSoup
 import shutil

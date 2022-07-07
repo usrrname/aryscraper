@@ -3,7 +3,6 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 from util import get_classifier_and_label, get_labels_from_csv, get_names_from_csv, remove_contents_in_brackets, write_to_csv
-ranks = list(get_labels_from_csv('ss-ranks.csv').values())
 
 
 def request_soupified_response(url):
