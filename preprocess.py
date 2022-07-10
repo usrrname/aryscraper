@@ -1,14 +1,14 @@
 # example of loading the keras facenet model
+import os
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import numpy as np
 from numpy import asarray
 from PIL import Image
-import os
 from mtcnn import MTCNN
-from names import women, einsatzgruppen_all, men
+from names import women, men
 
-required_size = (224, 224)
+required_size = (420, 420)
 
 
 def extract_face(filename, required_size):
@@ -75,27 +75,27 @@ def save_img(filename, face):
 
 
 if __name__ == '__main__':
-
     # TODO: add sysargs for flags and variables
     target_folder = 'men'
     save_dir = 'extracted'
     folders = os.listdir(target_folder)
 
-    if not os.path.exists('extracted'):
-        os.mkdir('extracted')
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
 
-    for subfolder in folders:
-        if subfolder.replace('_', ' ') in einsatzgruppen:
-            files = os.listdir(target_folder + '/' + subfolder)
-            path = [filepath for filepath in files if filepath !=
-                    '.DS_Store'][0]
-            face = extract_face(target_folder + '/' +
-                                subfolder + '/' + path, required_size)
+    for root, dirs, files in os.walk(target_folder):
 
-            filename = save_dir + '/' + subfolder + '.jpg'
-            if filename not in os.listdir(save_dir):
-                try:
-                    save_img(filename, face)
-                except Exception as err:
-                    print(err)
-                    pass
+        filename = [f for f in files if f != '.DS_Store']
+        if len(filename) > 1:
+            filename = [f for f in files if f != '.DS_Store'][0]
+        filename = ''.join(filename)
+        imgfilepath = root + '/' + filename
+        filename + '_extracted'
+        face = extract_face(imgfile, required_size)
+        os.chdir(root)
+        try:
+            save_img(filename, face)
+            os.chdir('..')
+        except Exception as err:
+            print(err)
+            pass
