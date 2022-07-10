@@ -6,22 +6,34 @@ import sys
 import pandas as pd
 import requests
 import json
-from util import save_as_json, extract_info
+from util import save_as_json
 import uuid
 
+locales = ['en', 'de', 'nl', 'fr', 'pl', 'pt', 'sv', 'lv']
 
-def get_wikidata(lang, subject, filename):
+
+def extract_info(lang, page, key):
+    result = {}
+    """Extracts info from Wikipedia"""
+    try:
+        result = page[key]
+    except Exception as e:
+        file = open(f'failed_{lang}.txt', 'a')
+        file.writelines(f'{lang} {e}' + '\n')
+        file.close()
+        pass
+    finally:
+        return result
+
+
+def get_wikidata(lang, wiki_query, filename):
     """
     Makes wikipedia api query and returns a dict object with the relevant metadata
     ===Parameters===
     lang: two letter language locale like en/de
-    subject: name of party member with spaces, should be an accepted route name for wikipedia query
-    filename: filename with .json extension
+    filename: filename with image extension ie. png/jpg
     """
-
     url = f'https://{lang}.wikipedia.org/w/api.php'
-
-    wiki_query = subject.strip().replace(' ', '_')
 
     params = {
         "action": "query",
@@ -47,8 +59,6 @@ def get_wikidata(lang, subject, filename):
         url = f'https://{lang}.wikipedia.org/wiki/{wiki_query}'
 
     page = next(iter(data['query']['pages'].values()))
-
-    id = uuid.uuid4()
     links = []
     extract, description, img_url = '', '', ''
 
@@ -60,7 +70,7 @@ def get_wikidata(lang, subject, filename):
                  for link in page['links']]
     except Exception as e:
         file = open(f'failed_{lang}.txt', 'a')
-        file.writelines(f'{subject} {l} {e}' + '\n')
+        file.writelines(f'{wiki_query} {lang} {e}' + '\n')
         file.close()
         pass
 
@@ -68,20 +78,27 @@ def get_wikidata(lang, subject, filename):
         img_url = page['original']['source']
     except Exception as e:
         file = open(f'failed_{lang}.txt', 'a')
-        file.writelines(f'{subject} {l} {e}' + '\n')
+        file.writelines(f'{wiki_query} {lang} {e}' + '\n')
         file.close()
         pass
 
     if lang != 'en':
-        extract = ts.google(extract)
-        description = ts.google(description)
+        try:
+            extract = ts.google(extract)
+            description = ts.google(description)
+        except Exception as e:
+            file = open(f'failed_{lang}.txt', 'a')
+            file.writelines(f'{wiki_query} {lang} {e}' + '\n')
+            file.close()
+            print(e)
+            pass
+
         links = [{'title': ts.google(link['title']), 'href': f'https://{lang}.wikipedia.org/wiki/' +
                   link['title'].replace(' ', '_')} for link in links]
 
     # TODO: include s3 url in returned info
     info = {
-        'id': str(id),
-        'name': subject,
+        # 'name': name,
         'src': img_url,
         'url': url,
         'filename': filename,
@@ -102,10 +119,23 @@ def create_name_filename_map(current_path):
         dirnames.extend([f for f in dirs if not f[0] == '.'])
         filenames.extend([d for d in files if not d[0] == '.'][:1])
 
-    names = [name.replace('_', ' ') for name in dirnames]
+    names = [name for name in dirnames]
     img_dict = dict(zip(names, filenames))
 
     return img_dict
+
+
+def get_wiki_info(wiki_query, filename):
+    person_meta = {}
+
+    for lang in locales:
+        try:
+            person_meta = get_wikidata(lang, wiki_query, filename)
+            break
+        except Exception as e:
+            print(wiki_query, e)
+            pass
+    return person_meta
 
 
 def main(argv):
@@ -132,19 +162,21 @@ def main(argv):
     print('Output file is "', outputfile)
 
     folder_map = create_name_filename_map(dirname)
-    locales = ['en', 'de', 'nl', 'fr', 'pl', 'pt', 'sv', 'lv']
-    faces = []
+
+    people = {}
 
     for k, v in folder_map.items():
+        name = k.replace('_', ' ')
+
         for lang in locales:
             try:
-                person_meta = get_wikidata(lang, k, v)
-                faces.append(person_meta)
-                break
-            except:
-                pass
+                person_meta = get_wikidata(lang, name, k, v)
+                identifier = str(uuid.uuid4())
+                people[identifier] = person_meta
+            except Exception as e:
+                print(e)
             finally:
-                save_as_json(outputfile, faces)
+                save_as_json(outputfile, people)
 
 
 if __name__ == '__main__':

@@ -1,12 +1,19 @@
 
+import os
 from util import save_as_json
+from folder_utils import find_corresponding_folder
+from names import men
+from wiki import get_wikidata, create_name_filename_map, get_wiki_info
+from uuid import uuid4
 
-einsatzgruppen1939 = {
-    'description': 'The first eight Einsatzgruppen of WWII were formed to aid the invasion of Poland on 1 September 1939. The Einsatzgruppen were paramilitary mobile killing squads that operated under the administration of the Schutzstaffel (SS), They were made up of Gestapo , Kripo and SD officials, deployed during Operation Tannenberg and the Intelligencektion until the spring of 1940; followed by the German AB-Aktion which ended at the end of 1940. Long before the attack on Poland, the Nazis, aided by the German minority living in the Second Polish Republic, drew up a list of Polish personalities containing the names of 61 000 members of the Polish elite. The list, printed in a 192-page book, is titled Sonderfahndungsbuch Polen. It is composed only of names and dates of birth of politicians, scholars, actors, intelligentsia, doctors, lawyers, nobility, priests, officers and many other people, put available for Einsatzgruppen and Volksdeutscher Selbstschutz. At the end of 1939, 50,000 Poles and Jews were murdered by these groups in the annexed territories, including more than 1,000 prisoners of war. The Einsatzgruppen performed murders with the support of the Volksdeutscher Selbstschutz, a paramilitary group consisting of ethnic Germans living in Poland.',
+einsatzgruppen_1939 = {
+    # 'description': 'The first eight Einsatzgruppen of WWII were formed to aid the invasion of Poland on 1 September 1939. The Einsatzgruppen were paramilitary mobile killing squads that operated under the administration of the Schutzstaffel (SS), They were made up of Gestapo , Kripo and SD officials, deployed during Operation Tannenberg and the Intelligencektion until the spring of 1940; followed by the German AB-Aktion which ended at the end of 1940. Long before the attack on Poland, the Nazis, aided by the German minority living in the Second Polish Republic, drew up a list of Polish personalities containing the names of 61 000 members of the Polish elite. The list, printed in a 192-page book, is titled Sonderfahndungsbuch Polen. It is composed only of names and dates of birth of politicians, scholars, actors, intelligentsia, doctors, lawyers, nobility, priests, officers and many other people, put available for Einsatzgruppen and Volksdeutscher Selbstschutz. At the end of 1939, 50,000 Poles and Jews were murdered by these groups in the annexed territories, including more than 1,000 prisoners of war. The Einsatzgruppen performed murders with the support of the Volksdeutscher Selbstschutz, a paramilitary group consisting of ethnic Germans living in Poland.',
     'Chief of Security Police and SD, or CSSD': {
-        'Reinhard Heydrich': 'SS-Obergruppenführer und General der Polizei',
-        'Heinrich Himmler': 'Reichsführer-SS',
-        'Ernst Kaltenbrunner': 'SS-Obergruppenführer',
+        'Leaders': {
+            'Reinhard Heydrich': 'SS-Obergruppenführer und General der Polizei',
+            'Heinrich Himmler': 'Reichsführer-SS',
+            'Ernst Kaltenbrunner': 'SS-Obergruppenführer',
+        }
     },
     'Einsatzgruppe I - Wien (14th Army)': {
         'Commander': {
@@ -43,17 +50,17 @@ einsatzgruppen1939 = {
         'Commander': {
             'Hans Fischer': 'SS-Obersturmbannführer',
             'Gustav Adolf Scheel': 'SS-Brigadeführer, Gauleiter of Salzburg, HSSPF Alpenland',
-            'Einsatzkommando 1/III': {
-                'Wilhelm Scharpwinkel': 'SS-Sturmbannführer, Oberregierungsrat'
-            },
-            'Einsatzkommando 2/III': {
-                'Fritz Liphardt': 'SS-Sturmbannführer'
-            },
+        },
+        'Einsatzkommando 1/III': {
+            'Wilhelm Scharpwinkel': 'SS-Sturmbannführer, Oberregierungsrat'
+        },
+        'Einsatzkommando 2/III': {
+            'Fritz Liphardt': 'SS-Sturmbannführer'
         },
     },
     'Einsatzgruppe IV – Dramburg (4th Army)': {
         'Commander': {
-            'Lothar Beutel ': 'SS-Brigadeführer',
+            'Lothar Beutel': 'SS-Brigadeführer',
             'Josef Albert Meisinger': 'Standartenführer'
         },
         'Einsatzkommando 1/IV': {
@@ -72,7 +79,7 @@ einsatzgruppen1939 = {
             'Heinz Gräfe': 'SS-Sturmbannführer'
         },
         'Einsatzkommando 2/V': {
-            'Robert Schefer': 'SS-Sturmbannführer'
+            'Robert Schefe': 'SS-Sturmbannführer, Regierungsrat (Bureau Secretary)'
         },
         'Einsatzkommando 3/V': {
             'Walter Albath': 'SS-Sturmbannführer'
@@ -90,7 +97,7 @@ einsatzgruppen1939 = {
             'Emil Haussmann': 'SS functionary'
         },
     },
-    'Einsatzgruppe z. B.V. (Upper Silesia and Cieszyn Silesia areas)': {
+    'Einsatzgruppe z.B.V. (Upper Silesia and Cieszyn Silesia areas)': {
         'Commander': {
             'Udo von Woyrsch': 'SS-Obergruppenführer (1939)',
             'Otto Rasch': 'SS-Oberführer',
@@ -105,7 +112,17 @@ einsatzgruppen1939 = {
     },
     'Einsatzkommando 16 – Danzig (Pomorze area)': {
         'Commander': {
-            'Rudolf Tröger': 'SS-Sturmbannführer'
+            'Rudolf Tröger': 'SS-Sturmbannführer',
+            'Horst Eichler': 'Kriminalkommissar und SS-Hauptsturmführer, Deputy'
+        },
+        'Gdynia Unit': {
+            'Friedrich Class': 'SS-Hauptsturmführer'
+        },
+        'Toruń Unit': {
+            'Hans-Joachim Leyer': 'SS-Sturmbannführer, Kriminalkommissar'
+        },
+        'Bydgoszcz Unit': {
+            'Jakob Lölgen': 'Kriminalrat',
         }
     }
 }
@@ -113,15 +130,17 @@ einsatzgruppen1939 = {
 
 einsatzgruppen_1941 = {
     'Chief of Security Police and SD, or CSSD': {
-        'Reinhard Heydrich': 'SS-Obergruppenführer und General der Polizei (1939–42)',
-        'Erich von dem Bach-Zelewski': 'SS Supreme Commander, Central Russia',
-        'Ernst Kaltenbrunner': 'SS-Obergruppenführer und General der Polizei (1943–45)',
+        'Leaders': {
+            'Reinhard Heydrich': 'SS-Obergruppenführer und General der Polizei (1939–42)',
+            'Erich von dem Bach-Zelewski': 'SS Supreme Commander, Central Russia',
+            'Ernst Kaltenbrunner': 'SS-Obergruppenführer und General der Polizei (1943–45)',
+        }
     },
     'Einsatzgruppe A (Army Group North – Baltic States)': {
-        'established': 'June 1941',
-        'disbanded': 'Oct. 1944',
-        'locations': 'Estonia, Latvia, Lithuania, between their easten borders and Leningrad',
-        'description': 'Einsatzgruppe A-attached to Army Group North-was formed at Gumbinnen, East Prussia on 23 June 1941. Stahlecker – its first commander – deployed the unit towards the Lithuanian border. His group consisted of 340 men from the Waffen SS, 89 from the Gestapo, 35 from the SD, 133 from the Orpo and 41 from the Kripo. When the Soviet troops withdrew from the temporary Lithuanian capital Kaunas, the city was retaken the next day by the Lithuanians during the anti-Soviet uprising.',
+        # 'established': 'June 1941',
+        # 'disbanded': 'Oct. 1944',
+        # 'locations': 'Estonia, Latvia, Lithuania, between their easten borders and Leningrad',
+        # 'description': 'Einsatzgruppe A-attached to Army Group North-was formed at Gumbinnen, East Prussia on 23 June 1941. Stahlecker – its first commander – deployed the unit towards the Lithuanian border. His group consisted of 340 men from the Waffen SS, 89 from the Gestapo, 35 from the SD, 133 from the Orpo and 41 from the Kripo. When the Soviet troops withdrew from the temporary Lithuanian capital Kaunas, the city was retaken the next day by the Lithuanians during the anti-Soviet uprising.',
         'Commander': {
             'Franz Walter Stahlecker': 'SS-Brigadeführer und Generalmajor der Polizei (1941–42)',
             'Heinz Jost': 'SS-Brigadeführer und Generalmajor der Polizei (1942)',
@@ -192,10 +211,10 @@ einsatzgruppen_1941 = {
         }
     },
     'Einsatzgruppe B (Army Group Centre – Eastern Poland)': {
-        'established': 'Jun. 1941',
-        'disbanded': 'Aug. 1944',
-        'locations': 'Warsaw, Belarus, Smolensk, Velikiye Luki, Kalinin, Orsha, Gomel, Chernigov, Orel, Kursk',
-        'description': 'Einsatzgruppe B followed Army Group Center as it advanced into Soviet territory, starting from Warsaw and fanning out across Belarus toward Minsk and Smolensk. It conducted mass killings of Jews in the area controlled by Army Group Center (Rear) as well as in areas closer to the front. Sonderkommando 7a led by Walter Blume, was attached to the 9th Army under General Adolf Strauß. The Sonderkommando was active in Brest-Litovsk (see the Brześć Ghetto), Kobrin, Pruzhany, Slonim (the Słonim Ghetto), Baranovichi, Stowbtsy, Minsk (the Minsk Ghetto), Orsha, Klinzy, Briansk, Kursk, Tserigov, and Orel. ',
+        # 'established': 'Jun. 1941',
+        # 'disbanded': 'Aug. 1944',
+        # 'locations': 'Warsaw, Belarus, Smolensk, Velikiye Luki, Kalinin, Orsha, Gomel, Chernigov, Orel, Kursk',
+        # 'description': 'Einsatzgruppe B followed Army Group Center as it advanced into Soviet territory, starting from Warsaw and fanning out across Belarus toward Minsk and Smolensk. It conducted mass killings of Jews in the area controlled by Army Group Center (Rear) as well as in areas closer to the front. Sonderkommando 7a led by Walter Blume, was attached to the 9th Army under General Adolf Strauß. The Sonderkommando was active in Brest-Litovsk (see the Brześć Ghetto), Kobrin, Pruzhany, Slonim (the Słonim Ghetto), Baranovichi, Stowbtsy, Minsk (the Minsk Ghetto), Orsha, Klinzy, Briansk, Kursk, Tserigov, and Orel. ',
         'Commander': {
             'Arthur Nebe': 'SS-Gruppenführer und Generalmajor der Polizei (1941)',
             'Erich Naumann': 'SS-Brigadeführer und Generalmajor der Polizei (1941–43)',
@@ -255,10 +274,10 @@ einsatzgruppen_1941 = {
         }
     },
     'Einsatzgruppe C (Army Group South – Soviet Ukraine)': {
-        'established': '1941',
-        'disbanded': 'August 1943',
-        'descrption': 'The Einzatzgruppe C, as a whole, was attached to the Army Group South. Its special task forces perpetrated mass killings across Ukraine',
-        'locations': 'Kiev, Lviv, Babi Yar, Tarnopol (modern Ternopil, see the Tarnopol Ghetto), Kremenchug, Poltava, Sloviansk, Proskurov, Vinnytsia, Kramatorsk, Gorlovka and Rostov.',
+        # 'established': '1941',
+        # 'disbanded': 'August 1943',
+        # 'description': 'The Einzatzgruppe C, as a whole, was attached to the Army Group South. Its special task forces perpetrated mass killings across Ukraine',
+        # 'locations': 'Kiev, Lviv, Babi Yar, Tarnopol (modern Ternopil, see the Tarnopol Ghetto), Kremenchug, Poltava, Sloviansk, Proskurov, Vinnytsia, Kramatorsk, Gorlovka and Rostov.',
         'Commander': {
             'Otto Rasch': 'SS-Gruppenführer und Generalmajor der Polizei (1941)',
             'Max Thomas': 'SS-Gruppenführer und Generalleutnant der Polizei (1941–43)',
@@ -298,8 +317,8 @@ einsatzgruppen_1941 = {
         }
     },
     'Einsatzgruppe D (11th Army – Crimea)': {
-        'description': 'Einsatzgruppe D, 600 troops initially, had its headquarters in Piatra-Neamt, Romania. Areas of operation were southern Ukraine, Crimea, Ciscaucasia. Dr. Otto Ohlendorf commanded Einsatzgruppe D. Himmler replaced him with SS-Brigadeführer und Generalmajor der Polizei dr. Walter Bierkamp. It was attached to the 11th Army.',
-        'locations': 'Northern Transylvania, Cernauti, Kishinev, Ukraine, Crimea, Ciscaucasia.',
+        # 'description': 'Einsatzgruppe D, 600 troops initially, had its headquarters in Piatra-Neamt, Romania. Areas of operation were southern Ukraine, Crimea, Ciscaucasia. Dr. Otto Ohlendorf commanded Einsatzgruppe D. Himmler replaced him with SS-Brigadeführer und Generalmajor der Polizei dr. Walter Bierkamp. It was attached to the 11th Army.',
+        # 'locations': 'Northern Transylvania, Cernauti, Kishinev, Ukraine, Crimea, Ciscaucasia.',
         'Commander': {
             'Otto Ohlendorf': 'SS-Gruppenführer und Generalleutnant der Polizei (1941–42)',
             'Walther Bierkamp': 'SS-Brigadeführer und Generalmajor der Polizei (1942–43)',
@@ -337,8 +356,8 @@ einsatzgruppen_1941 = {
         },
     },
     'Einsatzgruppe E (12th Army – Croatia)': {
-        'description': 'The Einsatzgruppe E was deployed in Croatia (i.e. in Yugoslavia) behind the 12th Army (Wehrmacht) in the area of Vinkovci (then Esseg), Sarajevo, Banja Luka, Knin, and Zagreb',
-        'locations': 'Vinkovci (then Esseg), Sarajevo, Banja Luka, Knin, and Zagreb',
+        # 'description': 'The Einsatzgruppe E was deployed in Croatia (i.e. in Yugoslavia) behind the 12th Army (Wehrmacht) in the area of Vinkovci (then Esseg), Sarajevo, Banja Luka, Knin, and Zagreb',
+        # 'locations': 'Vinkovci (then Esseg), Sarajevo, Banja Luka, Knin, and Zagreb',
         'Commander': {
             'Ludwig Teichmann': 'SS-Obersturmbannführer (1941–43)',
             'Günther Herrmann': 'SS-Standartenführer (1943–44)',
@@ -390,37 +409,75 @@ einsatzgruppen_1941 = {
 
 ignore_keys = ['established', 'disbanded', 'description', 'locations']
 
-include_keys = ['Commander', 'Adjutant']
+include_keys = ['Chief of Security Police and SD, or CSSD',
+                'Commander', 'Adjutant']
 
-einsatz1939_leaders = [{'name': item, 'group': 'Chief of Security Police and SD, or CSSD', 'role': value}
-                       for item, value in einsatzgruppen1939['Chief of Security Police and SD, or CSSD'].items()]
+include_group = ['kommando', 'unit', 'Commander']
 
-einsatz1939_commanders = [{'name': list(v.keys())[0], 'group': key, 'role': list(v.values())[
-    0] + ', Commander of ' + key} for key, value in einsatzgruppen1939.items() if key not in ignore_keys for k, v in value.items() if k in include_keys]
-
-einsatz1939_officers = [{'name': list(v.keys())[0], 'group': 'Einsatzgruppe ' + key.split(' ')[1] + ', ' + k, 'role': list(v.values())[0]} for key, value in einsatzgruppen1939.items(
-) if key not in ignore_keys for k, v in value.items() if 'kommando' in k]
+folder_map = create_name_filename_map('./men')
+# check if person obj with name exists
 
 
-einsatz1941_leaders = [{'name': item, 'group': 'Chief of Security Police and SD, or CSSD', 'role': value}
-                       for item, value in einsatzgruppen_1941['Chief of Security Police and SD, or CSSD'].items()]
+def get_all_names(obj):
+    objectkeys = [key for key in obj.keys() if key not in ignore_keys]
+    for group in objectkeys:
+        for k, v in obj[group].items():
+            if isinstance(v, dict):
+                for k2, v2 in v.items():
+                    yield k2, str(uuid4())
 
-einsatz1941_commanders = [{'name': list(v.keys())[0], 'group': key, 'role': list(v.values())[0] + f', {k} of {key}'} for key, value in einsatzgruppen_1941.items(
-) if key not in ignore_keys for k, v in value.items() if k in include_keys and v not in ignore_keys]
 
-einsatz1941_officers = [{'name': list(v.keys())[0], 'group': 'Einsatzgruppe ' + key.split(' ')[1] + ', ' + k, 'role': list(v.values())[0]} for key, value in einsatzgruppen_1941.items(
-) if key not in ignore_keys for k, v in value.items() if 'kommando' in k and v not in ignore_keys]
+einsatz1 = set(name for name in get_all_names(einsatzgruppen_1939))
+einsatz2 = set(name for name in get_all_names(einsatzgruppen_1941))
 
-einsatzgruppen_1939 = einsatz1939_leaders + \
-    einsatz1939_commanders + einsatz1939_officers
 
-einsatzgruppen_1941 = einsatz1941_leaders + \
-    einsatz1941_commanders + einsatz1941_officers
+def find_role_and_unit(obj, name):
+    objectkeys = [key for key in obj.keys() if key not in ignore_keys]
+    role = ''
+    for group in objectkeys:
+        shortened_group_name = group.split(
+            ' ')[0] + ' ' + group.split(' ')[1]
 
-save_as_json('einsatzgruppen_1939.json', einsatzgruppen_1939)
-save_as_json('einsatzgruppen_1941.json', einsatzgruppen_1941)
+        for k, v in obj[group].items():
 
-einsatzgruppen_all = einsatz1941_leaders + einsatz1939_commanders + \
-    einsatz1939_officers + einsatz1941_commanders + einsatz1941_officers
+            if isinstance(v, dict):
+                for k2, v2 in v.items():
+                    if k2 == name:
+                        if k == 'Commander' or k == 'Adjutant':
+                            role = f'{k} of {shortened_group_name}'
+                        else:
+                            unit = f', {k}' if k not in include_keys else ''
+                            role = f'{v2}' + unit
+                        return {'role': role, 'group': shortened_group_name}
 
-einsatzgruppen = [person['name'] for person in einsatzgruppen]
+
+def create_data(nameset, obj, filename):
+    people = []
+
+    for name, uuid in nameset:
+        folder_name = find_corresponding_folder(name, './men')
+        person = {}
+        person['name'], person['id'], person['wikiquery'] = name, uuid, folder_name
+
+        if folder_name == None:
+            print("Couldn't find corresponding folder for {name}")
+            person['wikiquery'] = name.replace(' ', '_')
+
+        role_unit = find_role_and_unit(obj, name)
+
+        if role_unit != None:
+            print("Found {role_unit} for {name}")
+            person.update(role_unit)
+
+        try:
+            meta = get_wiki_info(folder_name, folder_map[folder_name])
+            person.update(meta)
+            print('Successfully added meta data for ' + name)
+        except Exception as e:
+            print(e)
+            pass
+        finally:
+            print('Adding {name} to list')
+            people.append(person)
+
+        save_as_json(filename, people)
