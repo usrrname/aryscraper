@@ -1,5 +1,5 @@
-# example of loading the keras facenet model
 import os
+import json
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import numpy as np
@@ -7,7 +7,8 @@ from numpy import asarray
 from PIL import Image
 from mtcnn import MTCNN
 from names import women, men
-
+from util import read_dict_from_json, get_one_image_file, save_as_json
+from wiki import create_name_filename_map
 required_size = (420, 420)
 
 
@@ -74,28 +75,42 @@ def save_img(filename, face):
     plt.imsave(filename, face)
 
 
-if __name__ == '__main__':
-    # TODO: add sysargs for flags and variables
-    target_folder = 'men'
-    save_dir = 'extracted'
-    folders = os.listdir(target_folder)
+def extract_img(imgpath, folder):
+    for index, person in peopledict.items():
+        if person['wikiquery'] == folder:
+            face = extract_face(imgpath, required_size)
+            try:
+                filename = os.path.join(
+                    save_dir, person['name'].replace(' ', '_') + '_mtcnn.jpg')
+                save_img(filename, face)
+                person.update({'faceExtraction': filename})
+                peopledict.update({index: person})
+            except Exception as err:
+                print(err)
+                pass
+            finally:
+                save_as_json(save_dir + '/' +
+                             'einsatz1941_extracted.json', peopledict)
 
+
+if __name__ == '__main__':
+
+    target_folder = 'men'
+    save_dir = 'men_extracted'
+
+    # create name-filename map
+    folder_map = create_name_filename_map('./men')
+    peopledict = read_dict_from_json('men.json')
+
+    # if output directory doesn't exist, creates it
     if not os.path.exists(save_dir):
         os.mkdir(save_dir)
 
-    for root, dirs, files in os.walk(target_folder):
+    for key, person in peopledict.items():
 
-        filename = [f for f in files if f != '.DS_Store']
-        if len(filename) > 1:
-            filename = [f for f in files if f != '.DS_Store'][0]
-        filename = ''.join(filename)
-        imgfilepath = root + '/' + filename
-        filename + '_extracted'
-        face = extract_face(imgfile, required_size)
-        os.chdir(root)
-        try:
-            save_img(filename, face)
-            os.chdir('..')
-        except Exception as err:
-            print(err)
-            pass
+        filename = person['filename'].split('/')[0] + '_extracted'
+        extension = os.path.splitext(person['filename'])[1]
+        extracted_face_filename = save_dir + '/' + filename + extension
+        face = extract_face(target_folder+'/' +
+                            person['filename'], required_size)
+        save_img(extracted_face_filename, face)
