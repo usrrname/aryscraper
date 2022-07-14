@@ -9,7 +9,8 @@ from mtcnn import MTCNN
 from names import women, men
 from util import read_dict_from_json, get_one_image_file, save_as_json
 from wiki import create_name_filename_map
-required_size = (420, 420)
+# change image size as needed
+required_size = (120, 120)
 
 
 def extract_face(filename, required_size):
